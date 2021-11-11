@@ -1,13 +1,8 @@
 {
-  "recommendations": [
-    "johnsoncodehk.volar"
-  ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true,
     "source.fixAll.stylelint": true
   },
-  "eslint.validate": [
-    "javascript",
-    "vue"
-  ],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
 }
