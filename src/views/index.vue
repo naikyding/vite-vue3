@@ -2,19 +2,26 @@
 import { onMounted, reactive, ref } from 'vue'
 import { getAllTourismAPI, getTourismAPI } from '../request/api'
 
+import cover1 from '../assets/images/cover1.jpeg'
+import taiwanLogo from '../assets/images/taiwan_logo_white.svg'
+import cities from '../utils/cityData'
+
 const state = reactive({
-  data: []
+  data: [],
+  website: {
+    name: 'TAIWAN TRAVEL',
+    cover: { backgroundImage: `url(${cover1})`},
+  },
+  navs: [
+    '旅遊情報',
+    '景點查詢',
+    '美食推薦',
+    '旅宿資訊',
+    '節慶活動'
+  ],
+  cities
 })
 
-const webSiteName = ref('TAIWAN TRAVEL')
-
-const navs = reactive([
-  '旅遊情報',
-  '景點查詢',
-  '美食推薦',
-  '旅宿資訊',
-  '節慶活動'
-])
 
 onMounted(async() => {
   const res = await getAllTourismAPI({})
@@ -27,19 +34,48 @@ onMounted(async() => {
 
 
 <template>
-  <nav class="bg-red-50 flex justify-between items-center px-3 md:px-20 lg:px-36">
-    <!-- website logo -->
-    <a href="/" class="text-white text-2xl">{{ webSiteName }}</a>
+  <div class="h-screen bg-center bg-cover flex items-center justify-center flex-col" :style="state.website.cover">
+    <nav class="absolute top-0 inset-x-0 flex justify-between items-center px-1 md:px-8 xl:px-36">
+      <!-- website logo -->
+      <a href="/" class="text-white text-2xl">{{ state.website.name }}</a>
+      <!-- nav items -->
+      <ul class="flex items-center h-20">
+        <li class="md:px-1 lg:px-6" v-for="nav in state.navs" :key="nav">
+          <a class="text-white" href="#">{{ nav }}</a>
+        </li>
+      </ul>
+    </nav>
 
-    <!-- nav items -->
-    <ul class="flex items-center h-20">
-      <li class="md:px-1 lg:px-6 text-white" v-for="nav in navs" :key="nav">
-        <a href="#">{{ nav }}</a>
-      </li>
-    </ul>
-  </nav>
+    <section class="text-center w-full">
+      <img :src="taiwanLogo" class="m-auto" alt="taiwan">
+
+      <div class="search-area bg-white py-7 px-5 rounded-3xl flex w-3/5 m-auto">
+
+        <div class="select-area w-full relative">
+          <select name="" class="w-full appearance-none bg-input-bg border text-gray-700 py-3 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:border-primary">
+            <option v-for="(city, index) in cities" :key="city" :value="city">{{ index }}</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-black">
+            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+          </div>
+        </div>
+
+        <div class="select-area w-full relative mx-4">
+          <select name="" class="w-full appearance-none bg-input-bg border text-gray-700 py-3 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:border-primary">
+            <option v-for="(city, index) in cities" :key="city" :value="city">{{ index }}</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-black">
+            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+          </div>
+        </div>
+
+        <button class="rounded-xl text-white bg-primary px-8 py-3">
+          SEARCH
+        </button>
+      </div>
+    </section>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-
 </style>
