@@ -27,10 +27,13 @@ onMounted(async() => {
 
 
 <template>
-  <nav class="bg-red-50">
-    <ul class="flex justify-center items-center h-20 px-36">
-      <li class="text-white text-2xl flex-grow">{{ webSiteName }}</li>
-      <li class="px-6 text-white" v-for="nav in navs" :key="nav">
+  <nav class="bg-red-50 flex justify-between items-center px-3 md:px-20 lg:px-36">
+    <!-- website logo -->
+    <a href="/" class="text-white text-2xl">{{ webSiteName }}</a>
+
+    <!-- nav items -->
+    <ul class="flex items-center h-20">
+      <li class="md:px-1 lg:px-6 text-white" v-for="nav in navs" :key="nav">
         <a href="#">{{ nav }}</a>
       </li>
     </ul>
