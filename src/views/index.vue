@@ -34,13 +34,21 @@ onMounted(async() => {
 
 
 <template>
-  <div class="h-screen bg-center bg-cover flex items-center justify-center flex-col" :style="state.website.cover">
-    <nav class="absolute top-0 inset-x-0 flex justify-between items-center px-1 md:px-8 xl:px-36">
+  <div class="min-h-screen bg-center bg-cover flex items-center justify-center flex-col" :style="state.website.cover">
+
+    <!-- web nav -->
+    <nav class="absolute top-0 inset-x-0 flex justify-between items-center px-4 pt-4 sm:pt-0 sm:px-8 xl:px-36">
+      <button class="text-white sm:hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" fill="red" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
       <!-- website logo -->
       <a href="/" class="text-white text-2xl">{{ state.website.name }}</a>
+
       <!-- nav items -->
-      <ul class="flex items-center h-20">
-        <li class="md:px-1 lg:px-6" v-for="nav in state.navs" :key="nav">
+      <ul class="items-center h-20 hidden sm:flex">
+        <li class="sm:px-1 lg:px-6" v-for="nav in state.navs" :key="nav">
           <a class="text-white text-shadow-lg tracking-wider" href="#">{{ nav }}</a>
         </li>
       </ul>
@@ -50,7 +58,7 @@ onMounted(async() => {
       <!-- taiwan logo -->
       <img :src="taiwanLogo" class="px-10 m-auto" alt="taiwan">
 
-      <div class="search-area bg-white py-3 md:py-7 px-3 md:px-5 rounded-3xl flex flex-col md:flex-row w-4/5 md:w-3/5 m-auto transform translate-y-20 md:translate-y-0">
+      <div class="search-area bg-white py-3 md:py-7 px-3 md:px-5 rounded-3xl flex flex-col md:flex-row w-4/5 md:w-3/5 m-auto transform translate-y-16 sm:translate-y-10 md:translate-y-0">
 
         <!-- select -->
         <div class="select-area w-full relative">
@@ -81,5 +89,5 @@ onMounted(async() => {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 </style>
