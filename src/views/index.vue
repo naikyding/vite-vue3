@@ -41,16 +41,18 @@ onMounted(async() => {
       <!-- nav items -->
       <ul class="flex items-center h-20">
         <li class="md:px-1 lg:px-6" v-for="nav in state.navs" :key="nav">
-          <a class="text-white" href="#">{{ nav }}</a>
+          <a class="text-white text-shadow-lg tracking-wider" href="#">{{ nav }}</a>
         </li>
       </ul>
     </nav>
 
     <section class="text-center w-full">
-      <img :src="taiwanLogo" class="m-auto" alt="taiwan">
+      <!-- taiwan logo -->
+      <img :src="taiwanLogo" class="px-10 m-auto" alt="taiwan">
 
-      <div class="search-area bg-white py-7 px-5 rounded-3xl flex w-3/5 m-auto">
+      <div class="search-area bg-white py-3 md:py-7 px-3 md:px-5 rounded-3xl flex flex-col md:flex-row w-4/5 md:w-3/5 m-auto transform translate-y-20 md:translate-y-0">
 
+        <!-- select -->
         <div class="select-area w-full relative">
           <select name="" class="w-full appearance-none bg-input-bg border text-gray-700 py-3 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:border-primary">
             <option v-for="(city, index) in cities" :key="city" :value="city">{{ index }}</option>
@@ -60,7 +62,8 @@ onMounted(async() => {
           </div>
         </div>
 
-        <div class="select-area w-full relative mx-4">
+        <!-- select -->
+        <div class="select-area w-full relative mx-0 md:mx-4 my-3 md:my-0">
           <select name="" class="w-full appearance-none bg-input-bg border text-gray-700 py-3 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:border-primary">
             <option v-for="(city, index) in cities" :key="city" :value="city">{{ index }}</option>
           </select>
@@ -69,7 +72,8 @@ onMounted(async() => {
           </div>
         </div>
 
-        <button class="rounded-xl text-white bg-primary px-8 py-3">
+        <!-- search btn -->
+        <button class="bg-primary rounded-xl text-white px-8 py-3">
           SEARCH
         </button>
       </div>
