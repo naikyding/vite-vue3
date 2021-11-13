@@ -37,9 +37,10 @@ onMounted(async() => {
 
 
 <template>
-  <div class="min-h-screen bg-center bg-cover flex items-center justify-center flex-col" :style="state.website.cover">
+  <div class="min-h-screen bg-center bg-cover flex items-center justify-center flex-col relative" :style="state.website.cover">
     <!-- mobile nav -->
-    <div v-show="state.mobile.navStatus" class="bg-white absolute z-10 top-0 left-0 p-4 w-full">
+    <div v-show="state.mobile.navStatus" @click="state.mobile.navStatus = false" class="absolute z-10 bg-black opacity-50 inset-0"></div>
+    <div v-show="state.mobile.navStatus" class="bg-white absolute z-20 top-0 left-0 p-4 w-full">
       <div @click="state.mobile.navStatus = false" class="close-btn">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
