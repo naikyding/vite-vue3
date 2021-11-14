@@ -85,8 +85,8 @@ const state = reactive({
       justify-between
       items-center
       px-4
-      pt-4
-      sm:pt-0 sm:px-8
+      py-4
+      sm:pt-0 sm:px-8 sm:py-0
       xl:px-36
     "
     :class="[
