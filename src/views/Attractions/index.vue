@@ -6,8 +6,11 @@ import Header from '../../components/Header.vue'
 import coverImg from '../../assets/images/cover4.jpeg'
 import cities from '../../utils/cityData'
 import selectArrow from '../../assets/icon/arrangement.svg'
+import noImage from '../../assets/icon/no-image.svg'
+
 
 const store = useStore()
+
 // 取得所有旅遊景點
 const getAllTourism = () => store.dispatch('get_all_tourism', {$top: 8})
 getAllTourism()
@@ -153,12 +156,24 @@ onMounted(() => {
 
         <!-- result items -->
         <div class="result-items col-span-3 mt-8">
-          <figure class="bg-white border shadow rounded-2xl flex overflow-hidden mb-10" v-for="item in stateTourismData" :key="item.ID">
-            <img class="h-auto w-80" :src="item.Picture.PictureUrl1" :alt="item.Name">
+          <figure class="bg-white border shadow-lg rounded-2xl flex overflow-hidden mb-10 h-60" v-for="item in stateTourismData" :key="item.ID">
+            <img class="h-auto w-80" :src="item.Picture.PictureUrl1 || noImage" :alt="item.Name">
             <figcaption class="px-4 py-5 flex-1">
-              <h2 class="block text-xl mb-2 text-secondary">
-                {{ item.Name }}
-              </h2>
+              <div class="figcaption-header flex justify-between mb-2">
+                <h2 class="block text-xl text-secondary">
+                  {{ item.Name }}
+                </h2>
+                <!-- TAG (CLASS) -->
+                <div v-if="item.Class1" class="tag bg-primary text-white px-3 flex items-center rounded-full">
+                  {{ item.Class1}}
+                </div>
+                <div v-if="item.Class2" class="tag bg-primary text-white px-3 flex items-center rounded-full">
+                  {{ item.Class2}}
+                </div>
+                <div v-if="item.Class3" class="tag bg-primary text-white px-3 flex items-center rounded-full">
+                  {{ item.Class3}}
+                </div>
+              </div>
               <div class="description text-gray-500">
                 {{ item.Description.length > 70 ? item.Description.slice(0, 70) + '...' : item.Description }}
               </div>
