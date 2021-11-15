@@ -1,10 +1,16 @@
 <script setup>
-import {reactive, ref} from 'vue'
+import {reactive, onMounted, computed} from 'vue'
+import { useStore } from 'vuex'
 
 import Header from '../../components/Header.vue'
 import coverImg from '../../assets/images/cover4.jpeg'
 import cities from '../../utils/cityData'
 import selectArrow from '../../assets/icon/arrangement.svg'
+
+const store = useStore()
+// 取得所有旅遊景點
+const getAllTourism = () => store.dispatch('get_all_tourism', {$top: 8})
+getAllTourism()
 
 const state = reactive({
   cover: {backgroundImage: `url(${coverImg})`},
@@ -15,6 +21,11 @@ const state = reactive({
     {'全部': 'all'},
     {'全部': 'all'},
   ]
+})
+
+const stateTourismData = computed(() => store.state.attractions)
+
+onMounted(() => {
 })
 </script>
 
@@ -37,7 +48,7 @@ const state = reactive({
 
     <!-- 熱門景點 -->
     <section class="mt-5">
-      <h2 class="text-lg text-secondary">
+      <h2 class="text-xl text-secondary">
         {{ state.title[0] }}
       </h2>
       <div class="slider h-56 bg-red-400"></div>
@@ -46,7 +57,7 @@ const state = reactive({
     <div class="grid grid-cols-1 md:gap-10 md:grid-cols-3">
       <!-- 快速搜尋 -->
       <section class="mt-5">
-        <h2 class="hidden text-lg font-medium text-secondary">
+        <h2 class="hidden text-xl font-medium text-secondary">
           {{ state.title[1] }}
         </h2>
 
@@ -66,7 +77,7 @@ const state = reactive({
         >
           <input
             type="text"
-            class="w-full appearance-none h-full focus:outline-none text-lg"
+            class="w-full appearance-none h-full focus:outline-none text-xl"
             placeholder="關鍵字查詢"
           />
           <button>
@@ -89,8 +100,8 @@ const state = reactive({
 
         <!-- search select -->
         <div class="search-select shadow-xl border rounded-xl mt-8 px-4 py-5">
-          <p class="text-lg mb-4">篩選內容</p>
-          <h2 class="text-lg text-secondary mb-2">縣市</h2>
+          <p class="text-xl mb-4">篩選內容</p>
+          <h2 class="text-xl text-secondary mb-2">縣市</h2>
           <!-- select -->
           <div class="select-area w-full relative">
             <select name="" class="w-full appearance-none bg-input-bg border text-gray-700 py-3 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:border-primary">
@@ -103,7 +114,7 @@ const state = reactive({
           
           <hr class="my-4 border-1 bg-gray-200">
 
-          <h2 class="text-lg text-secondary mb-2">類別</h2>
+          <h2 class="text-xl text-secondary mb-2">類別</h2>
           <label class="block" v-for="item in state.class" :key="item">
             <input class="mr-2" name="class" type="radio" >
             <span class="text-primary3">{{ Object.keys(item)[0]}}</span>
@@ -121,7 +132,7 @@ const state = reactive({
       <!-- 搜尋結果 -->
       <section class="mt-5 col-span-2">
         <div class="flex justify-between items-center">
-          <h2 class="block text-lg text-secondary">
+          <h2 class="block text-xl text-secondary">
             {{ state.title[2] }}
           </h2>
 
@@ -133,7 +144,7 @@ const state = reactive({
                 <img class="h-6" :src="selectArrow" alt="">
               </div>
               
-              <select name="" class="w-full appearance-none bg-white border text-gray-700 py-3 px-4 pl-10 rounded-xl leading-tight focus:outline-none focus:border-primary">
+              <select name="" class="w-full h-14 appearance-none bg-white border text-gray-700 py-3 px-4 pl-10 rounded-xl leading-tight focus:outline-none focus:border-primary">
                 <option>排序: 熱門度</option>
               </select>
             </div>
@@ -141,7 +152,19 @@ const state = reactive({
         </div>
 
         <!-- result items -->
-        <div class="result-items bg-blue-700 col-span-3"></div>
+        <div class="result-items col-span-3 mt-8">
+          <figure class="bg-white border shadow rounded-2xl flex overflow-hidden mb-10" v-for="item in stateTourismData" :key="item.ID">
+            <img class="h-auto w-80" :src="item.Picture.PictureUrl1" :alt="item.Name">
+            <figcaption class="px-4 py-5 flex-1">
+              <h2 class="block text-xl mb-2 text-secondary">
+                {{ item.Name }}
+              </h2>
+              <div class="description text-gray-500">
+                {{ item.Description.length > 70 ? item.Description.slice(0, 70) + '...' : item.Description }}
+              </div>
+            </figcaption>
+          </figure>
+        </div>
       </section>
     </div>
   </div>

@@ -1,8 +1,8 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue'
-import { getAllTourismAPI, getTourismAPI } from '../request/api'
-import Header from '../components/Header.vue'
+import store from '../store'
 
+import Header from '../components/Header.vue'
 import cover1 from '../assets/images/cover1.jpeg'
 import taiwanLogo from '../assets/images/taiwan_logo_white.svg'
 import cities from '../utils/cityData'
@@ -14,13 +14,6 @@ const state = reactive({
   },
   cities
 })
-
-
-onMounted(async() => {
-  const res = await getAllTourismAPI({})
-  await getTourismAPI({})
-})
-
 </script>
 
 

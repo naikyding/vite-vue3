@@ -10,7 +10,7 @@ module.exports = {
   
         secondary: '#A6CDE0',
         secondary2: '#F8C3A1',
-        secondary2: '#B4B4B4',
+        secondary3: '#B4B4B4',
   
         'input-bg': '#EBEBEB'
       }
