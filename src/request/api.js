@@ -8,6 +8,6 @@ export const getAllTourismAPI = ({$top = '30', $format = 'JSON'}) => request.get
 })
 
 // 取得[指定]觀光景點資料
-export const getTourismAPI = ({city = 'NewTaipei', $top = '30', $format = 'JSON'}) => request.get(`ScenicSpot/${city}`,{
-  params: { $top, $format },
+export const getTourismAPI = (data = {city: 'NewTaipei', $top: '30', $format: 'JSON'}) => request.get(`ScenicSpot/${data.city}`,{
+  params: data,
 })

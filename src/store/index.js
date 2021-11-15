@@ -21,7 +21,9 @@ const actions = {
 	},
 
 	async get_tourism({ commit }, filterData) {
+		console.log(filterData)
 		const res = await getTourismAPI(filterData)
+		console.log(res.data)
 		if(res.status === 200) commit('SET_SEARCH_TOURISM', res.data)
 	}
 }

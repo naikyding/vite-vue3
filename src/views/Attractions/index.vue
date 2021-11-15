@@ -20,17 +20,26 @@ const state = reactive({
   cover: {backgroundImage: `url(${coverImg})`},
   title: ['熱門景點', '快速搜尋', '搜尋結果'],
   cities,
+
+  // 篩選類別
   class: [
-    {'option1': '1'},
-    {'option2': '2'},
-    {'option3': '3'},
+    // {'option1': '1'},
+    // {'option2': '2'},
+    // {'option3': '3'},
   ],
 
+  // 篩選 select && radio
   form: {
     city: 'Taipei',
-    class: 'all'
+    class: 'all',
+    keyword: ''
   }
 })
+
+function searchKeyword(e, keyword = state.form.keyword) {
+  if(!keyword) return false
+  return `(contains(Name, '${keyword}') or contains(DescriptionDetail, '${keyword}'))`
+}
 
 const stateTourismData = computed(() => store.state.attractions)
 
@@ -86,11 +95,12 @@ onMounted(() => {
           "
         >
           <input
+            v-model.trim="state.form.keyword"
             type="text"
             class="w-full appearance-none h-full focus:outline-none text-xl"
             placeholder="關鍵字查詢"
           />
-          <button>
+          <button @click="getOneCityTourism({$filter: searchKeyword(), city: state.form.city, $top: 8})">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6 text-secondary"
@@ -149,8 +159,8 @@ onMounted(() => {
 
       <!-- 搜尋結果 -->
       <section class="mt-5 col-span-2">
-        <div class="flex justify-between items-center">
-          <h2 class="block text-xl text-secondary">
+        <div class="flex justify-between md:justify-end items-center">
+          <h2 class="block md:hidden text-xl text-secondary">
             {{ state.title[2] }}
           </h2>
 
