@@ -18,7 +18,7 @@ const getOneCityTourism = (filterData) =>
 
 const state = reactive({
   cover: {backgroundImage: `url(${coverImg})`},
-  title: ['熱門景點', '快速搜尋', '搜尋結果'],
+  title: ['熱門景點', '景點快搜', '搜尋結果'],
   cities,
 
   // 篩選類別
@@ -35,13 +35,12 @@ const state = reactive({
     keyword: '',
   },
 })
+const stateTourismData = computed(() => store.state.attractions)
 
 function searchKeyword(e, keyword = state.form.keyword) {
-  if (!keyword) return false
+  if (!keyword) return null
   return `(contains(Name, '${keyword}') or contains(DescriptionDetail, '${keyword}'))`
 }
-
-const stateTourismData = computed(() => store.state.attractions)
 
 onMounted(() => {
   getOneCityTourism({city: state.form.city, $top: 8})
@@ -76,155 +75,66 @@ onMounted(() => {
     <div class="grid grid-cols-1 md:gap-10 md:grid-cols-3">
       <!-- 快速搜尋 -->
       <section class="mt-5">
-        <h2 class="hidden text-xl font-medium text-secondary">
-          {{ state.title[1] }}
-        </h2>
-
-        <!-- search bar -->
-        <div
-          class="
-            search-bar
-            flex
-            h-14
-            rounded-xl
-            items-center
-            px-4
-            leading-tight
-            border border-gray-200
-            focus-within:border-primary
-          "
-        >
-          <input
-            v-model.trim="state.form.keyword"
-            type="text"
-            class="w-full appearance-none h-full focus:outline-none text-xl"
-            placeholder="關鍵字查詢"
-          />
-          <button
-            @click="
-              getOneCityTourism({
-                $filter: searchKeyword(),
-                city: state.form.city,
-                $top: 8,
-              })
-            "
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 text-secondary"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </button>
-        </div>
-
         <!-- search select -->
-        <div class="search-select shadow-xl border rounded-xl mt-8 px-4 py-5">
-          <p class="text-xl mb-4 text-gray-500">篩選內容</p>
-          <h2 class="text-xl text-secondary mb-2">縣市</h2>
-          <!-- select -->
-          <div class="select-area w-full relative">
-            <select
-              v-model="state.form.city"
-              class="
-                w-full
-                appearance-none
-                bg-input-bg
-                border
-                text-gray-700
-                py-3
-                px-4
-                pr-8
-                rounded-xl
-                leading-tight
-                focus:outline-none focus:border-primary
-              "
-            >
-              <option v-for="(city, index) in cities" :key="city" :value="city">
-                {{ index }}
-              </option>
-            </select>
-            <div
-              class="
-                pointer-events-none
-                absolute
-                inset-y-0
-                right-0
-                flex
-                items-center
-                px-2
-                text-black
-              "
-            >
-              <svg
-                class="fill-current h-4 w-4"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
+        <div class="search-select shadow-xl border rounded-xl px-4 py-5">
+          <p class="text-xl mb-4 text-secondary">景點快搜</p>
+          <label>
+            <h2 class="text-xl text-gray-500 mb-2">縣市</h2>
+            <!-- select -->
+            <div class="select-area w-full relative">
+              <select
+                v-model="state.form.city"
+                class="
+                  w-full
+                  appearance-none
+                  bg-input-bg
+                  border
+                  text-gray-700
+                  py-3
+                  px-4
+                  pr-8
+                  h-14
+                  rounded-xl
+                  leading-tight
+                  focus:outline-none focus:border-primary
+                "
               >
-                <path
-                  d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                />
-              </svg>
+                <option
+                  v-for="(city, index) in cities"
+                  :key="city"
+                  :value="city"
+                >
+                  {{ index }}
+                </option>
+              </select>
+              <div
+                class="
+                  pointer-events-none
+                  absolute
+                  inset-y-0
+                  right-0
+                  flex
+                  items-center
+                  px-2
+                  text-black
+                  h-14
+                "
+              >
+                <svg
+                  class="fill-current h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                  />
+                </svg>
+              </div>
             </div>
-          </div>
-
-          <hr class="my-4 border-1 bg-gray-200" />
-
-          <!-- 類別 -->
-          <h2 class="text-xl text-secondary mb-2">類別</h2>
-
-          <!-- 全部 類別 -->
-          <label class="block">
-            <input
-              v-model="state.form.class"
-              value="all"
-              class="mr-2"
-              name="class"
-              type="radio"
-            />
-            <span class="text-primary3">全部</span>
           </label>
-
-          <label class="block" v-for="item in state.class" :key="item">
-            <input
-              v-model="state.form.class"
-              :value="Object.values(item)[0]"
-              class="mr-2"
-              name="class"
-              type="radio"
-            />
-            <span class="text-primary3">{{ Object.keys(item)[0] }}</span>
-          </label>
-
-          <!-- search btn -->
-          <div class="text-center mt-5">
-            <button
-              @click="getOneCityTourism({city: state.form.city, $top: 8})"
-              class="bg-primary rounded-xl text-white px-10 py-3"
-            >
-              SEARCH
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- 搜尋結果 -->
-      <section class="mt-5 col-span-2">
-        <div class="flex justify-between md:justify-end items-center">
-          <h2 class="block md:hidden text-xl text-secondary">
-            {{ state.title[2] }}
-          </h2>
 
           <!-- filter btn -->
-          <div class="filter-btn">
+          <div class="filter-btn my-4">
             <!-- select -->
             <div class="select-area w-full relative">
               <div
@@ -263,10 +173,100 @@ onMounted(() => {
               </select>
             </div>
           </div>
+
+          <!-- search bar -->
+          <div
+            class="
+              search-bar
+              flex
+              h-14
+              rounded-xl
+              items-center
+              px-4
+              leading-tight
+              border border-gray-200
+              focus-within:border-primary
+            "
+          >
+            <input
+              v-model.trim="state.form.keyword"
+              type="text"
+              class="w-full appearance-none h-full focus:outline-none text-xl"
+              placeholder="請輸入關鍵字"
+            />
+            <button
+              v-show="state.form.keyword"
+              @click="state.form.keyword = null"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <hr class="my-4 border-1 bg-gray-200" />
+
+          <!-- 類別 -->
+          <h2 class="text-xl text-secondary mb-2">類別</h2>
+
+          <!-- 全部 類別 -->
+          <label class="block">
+            <input
+              v-model="state.form.class"
+              value="all"
+              class="mr-2"
+              name="class"
+              type="radio"
+            />
+            <span class="text-primary3">全部</span>
+          </label>
+
+          <label class="block" v-for="item in state.class" :key="item">
+            <input
+              v-model="state.form.class"
+              :value="Object.values(item)[0]"
+              class="mr-2"
+              name="class"
+              type="radio"
+            />
+            <span class="text-primary3">{{ Object.keys(item)[0] }}</span>
+          </label>
+
+          <!-- search btn -->
+          <div class="text-center mt-5">
+            <button
+              @click="
+                getOneCityTourism({
+                  city: state.form.city,
+                  $top: 8,
+                  $filter: searchKeyword(state.form.keyword),
+                })
+              "
+              class="bg-primary rounded-xl text-white px-10 py-3"
+            >
+              SEARCH
+            </button>
+          </div>
         </div>
+      </section>
+
+      <!-- 搜尋結果 -->
+      <section class="mt-5 col-span-2">
+        <h2 class="block md:hidden text-xl text-secondary">
+          {{ state.title[2] }}
+        </h2>
 
         <!-- result items -->
-        <div class="result-items col-span-3 mt-8">
+        <div class="result-items col-span-3 mt-3 md:mt-0">
           <figure
             class="
               bg-white

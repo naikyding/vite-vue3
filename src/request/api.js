@@ -3,11 +3,20 @@
 import { request } from './index'
 
 // 取得[所有]觀光景點資料
-export const getAllTourismAPI = ({$top = '30', $format = 'JSON'}) => request.get(`ScenicSpot`,{
-  params: { $top, $format },
-})
+export const getAllTourismAPI = ({ $top = '30', $format = 'JSON' }) =>
+  request.get(`ScenicSpot`, {
+    params: { $top, $format },
+  })
 
 // 取得[指定]觀光景點資料
-export const getTourismAPI = (data = {city: 'NewTaipei', $top: '30', $format: 'JSON'}) => request.get(`ScenicSpot/${data.city}`,{
-  params: data,
-})
+export const getTourismAPI = ({ city = 'NewTaipei', $top = '30', $format = 'JSON', $filter = null }) => {
+  return request.get(`ScenicSpot/${city}`, {
+    params: {
+      city,
+      $top,
+      $format,
+      $filter
+    },
+  })
+}
+
