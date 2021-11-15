@@ -8,4 +8,5 @@
   "vetur.validation.script": false,
   "vetur.validation.style": false,
   "editor.tabSize": 2,
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
 }
