@@ -1,12 +1,25 @@
 import { createStore } from "vuex";
+import { getAllTourismAPI, getTourismAPI } from '../request/api'
+
 
 const state = () => ({
-	data: 123
+	attractions: []
 })
 
 const getters = {}
-const mutations = {}
-const actions = {}
+
+const mutations = {
+	SET_SEARCH_TOURISM(state, resData) {
+		state.attractions = resData
+	}
+}
+
+const actions = {
+	async get_all_tourism({commit}, filterData) {
+		const res = await getAllTourismAPI(filterData)
+		if(res.status === 200) commit('SET_SEARCH_TOURISM', res.data)
+	}
+}
 
 const store = createStore({
 	state,
