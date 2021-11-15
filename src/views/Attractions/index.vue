@@ -110,7 +110,7 @@ onMounted(() => {
 
         <!-- search select -->
         <div class="search-select shadow-xl border rounded-xl mt-8 px-4 py-5">
-          <p class="text-xl mb-4">篩選內容</p>
+          <p class="text-xl mb-4 text-gray-500">篩選內容</p>
           <h2 class="text-xl text-secondary mb-2">縣市</h2>
           <!-- select -->
           <div class="select-area w-full relative">
@@ -140,7 +140,7 @@ onMounted(() => {
 
           <!-- search btn -->
           <div class="text-center mt-5">
-            <button class="bg-primary rounded-xl text-white px-10 py-3">
+            <button @click="getOneCityTourism({city: state.form.city, $top: 8})" class="bg-primary rounded-xl text-white px-10 py-3">
               SEARCH
             </button>
           </div>
@@ -171,7 +171,7 @@ onMounted(() => {
 
         <!-- result items -->
         <div class="result-items col-span-3 mt-8">
-          <figure class="bg-white border shadow-lg rounded-2xl flex overflow-hidden mb-10 h-32 md:h-60" v-for="item in stateTourismData" :key="item.ID">
+          <figure class="bg-white border shadow-lg rounded-2xl flex overflow-hidden mb-5 md:mb-10 h-32 md:h-60" v-for="item in stateTourismData" :key="item.ID">
             <img class="h-auto object-cover object-center w-40 lg:w-80" :src="item.Picture.PictureUrl1 || noImage" :alt="item.Name">
             <figcaption class="px-2 md:px-4 py-3 md:py-5 flex-1 flex flex-col">
               <!-- TITLE && TAGS -->
