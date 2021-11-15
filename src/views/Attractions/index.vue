@@ -2,6 +2,14 @@
 import {reactive, onMounted, computed} from 'vue'
 import {useStore} from 'vuex'
 
+// swiper
+import {Swiper, SwiperSlide} from 'swiper/vue'
+import SwiperCore, {Pagination, Navigation} from 'swiper'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import 'swiper/css/scrollbar'
+
 import Header from '../../components/Header.vue'
 import coverImg from '../../assets/images/cover4.jpeg'
 import cities from '../../utils/cityData'
@@ -9,6 +17,7 @@ import selectArrow from '../../assets/icon/arrangement.svg'
 import noImage from '../../assets/icon/no-image.svg'
 
 const store = useStore()
+SwiperCore.use([Pagination, Navigation])
 
 // 取得所有旅遊景點
 // const getAllTourism = () => store.dispatch('get_all_tourism', {$top: 8})
@@ -44,6 +53,13 @@ function searchKeyword(e, keyword = state.form.keyword) {
 
 onMounted(() => {
   getOneCityTourism({city: state.form.city, $top: 8})
+
+  const onSwiper = (swiper) => {
+    console.log(swiper)
+  }
+  const onSlideChange = () => {
+    console.log('slide change')
+  }
 })
 </script>
 
@@ -69,7 +85,30 @@ onMounted(() => {
       <h2 class="text-xl text-secondary">
         {{ state.title[0] }}
       </h2>
-      <div class="slider h-56 bg-red-400"></div>
+      <div class="slider h-56 bg-red-400">
+        <swiper
+          :slidesPerView="3"
+          :spaceBetween="30"
+          :slidesPerGroup="3"
+          :loop="true"
+          :loopFillGroupWithBlank="true"
+          :pagination="{
+            clickable: true,
+          }"
+          :navigation="true"
+          class="mySwiper"
+        >
+          <swiper-slide>Slide 1</swiper-slide
+          ><swiper-slide>Slide 2</swiper-slide
+          ><swiper-slide>Slide 3</swiper-slide
+          ><swiper-slide>Slide 4</swiper-slide
+          ><swiper-slide>Slide 5</swiper-slide
+          ><swiper-slide>Slide 6</swiper-slide
+          ><swiper-slide>Slide 7</swiper-slide
+          ><swiper-slide>Slide 8</swiper-slide
+          ><swiper-slide>Slide 9</swiper-slide>
+        </swiper>
+      </div>
     </section>
 
     <div class="grid grid-cols-1 md:gap-10 md:grid-cols-3">

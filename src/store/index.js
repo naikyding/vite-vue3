@@ -15,16 +15,14 @@ const mutations = {
 }
 
 const actions = {
-	async get_all_tourism({commit}, filterData) {
+	async get_all_tourism({ commit }, filterData) {
 		const res = await getAllTourismAPI(filterData)
-		if(res.status === 200) commit('SET_SEARCH_TOURISM', res.data)
+		if (res.status === 200) commit('SET_SEARCH_TOURISM', res.data)
 	},
 
 	async get_tourism({ commit }, filterData) {
-		console.log(filterData)
 		const res = await getTourismAPI(filterData)
-		console.log(res.data)
-		if(res.status === 200) commit('SET_SEARCH_TOURISM', res.data)
+		if (res.status === 200) commit('SET_SEARCH_TOURISM', res.data)
 	}
 }
 
