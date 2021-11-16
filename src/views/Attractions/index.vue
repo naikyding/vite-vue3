@@ -60,7 +60,10 @@ onMounted(() => {
 
 <template>
   <!-- cover image -->
-  <div class="header-bg h-16 sm:h-40 bg-center bg-cover" :style="state.cover" />
+  <div
+    class="header-bg mt-16 sm:mt-20 h-16 sm:h-40 bg-center bg-cover"
+    :style="state.cover"
+  />
 
   <div class="px-4 sm:px-8 xl:px-36">
     <!-- URL PATH -->
