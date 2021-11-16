@@ -1,7 +1,6 @@
 <script setup>
 import { reactive } from 'vue'
 
-import Header from '../components/Header.vue'
 import cover1 from '../assets/images/cover1.jpeg'
 import taiwanLogo from '../assets/images/taiwan_logo_white.svg'
 import cities from '../utils/cityData'
@@ -28,9 +27,6 @@ const state = reactive({
     "
     :style="state.website.cover"
   >
-    <!-- header -->
-    <Header />
-
     <section class="text-center w-full">
       <!-- taiwan logo -->
       <img :src="taiwanLogo" class="px-10 m-auto" alt="taiwan" />

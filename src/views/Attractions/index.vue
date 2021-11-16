@@ -10,7 +10,6 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
 
-import Header from '../../components/Header.vue'
 import coverImg from '../../assets/images/cover4.jpeg'
 
 import cities from '../../utils/cityData'
@@ -60,13 +59,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <Header />
-
   <!-- cover image -->
-  <div
-    class="header-bg mt-16 sm:mt-20 h-16 sm:h-40 bg-center bg-cover"
-    :style="state.cover"
-  />
+  <div class="header-bg h-16 sm:h-40 bg-center bg-cover" :style="state.cover" />
 
   <div class="px-4 sm:px-8 xl:px-36">
     <!-- URL PATH -->
