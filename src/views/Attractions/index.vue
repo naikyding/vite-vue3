@@ -12,6 +12,7 @@ import 'swiper/css/scrollbar'
 
 import coverImg from '../../assets/images/cover4.jpeg'
 
+import PagePagination from '../../components/PagePagination.vue'
 import cities from '../../utils/cityData'
 import selectArrow from '../../assets/icon/arrangement.svg'
 import noImage from '../../assets/icon/no-image.svg'
@@ -30,13 +31,10 @@ getAllTourism()
 
 const state = reactive({
   cover: { backgroundImage: `url(${coverImg})` },
-
   title: ['熱門景點', '景點快搜', '搜尋結果'],
   cities,
-
   // 篩選類別
   class: [{ option1: '1' }, { option2: '2' }, { option3: '3' }],
-
   // 篩選 select && radio
   form: {
     city: 'Taipei',
@@ -47,14 +45,17 @@ const state = reactive({
 
 const stateTourismData = computed(() => store.state.attractions)
 const stateAllTourismData = computed(() => store.state.allAttractions)
+const stateTourismDataAllPage = computed(
+  () => stateTourismData.value.length / 8
+)
 
 function searchKeyword(e, keyword = state.form.keyword) {
   if (!keyword) return null
   return `(contains(Name, '${keyword}') or contains(DescriptionDetail, '${keyword}'))`
 }
 
-onMounted(() => {
-  getOneCityTourism({ city: state.form.city, $top: 8 })
+onMounted(async () => {
+  await getOneCityTourism({ city: state.form.city, $top: 30 })
 })
 </script>
 
@@ -315,7 +316,6 @@ onMounted(() => {
               @click="
                 getOneCityTourism({
                   city: state.form.city,
-                  $top: 8,
                   $filter: searchKeyword(state.form.keyword),
                 })
               "
@@ -476,6 +476,10 @@ onMounted(() => {
               </div>
             </figcaption>
           </figure>
+        </div>
+
+        <div class="mb-5">
+          <PagePagination :all-page="stateTourismDataAllPage" />
         </div>
       </section>
     </div>
