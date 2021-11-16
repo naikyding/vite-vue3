@@ -5,13 +5,9 @@ import Header from '@/components/Header.vue'
 </script>
 
 <template>
-  <div class="relative">
-    <!-- header -->
-    <div class="sticky top-0 z-50">
-      <Header />
-    </div>
-    <router-view />
-  </div>
+  <Header />
+  <router-view />
+  <Footer />
 </template>
 
 <style></style>

@@ -1,8 +1,9 @@
 <script setup>
 import { reactive } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
+const router = useRouter()
 const routeName = route.name
 
 const state = reactive({
@@ -21,6 +22,11 @@ const state = reactive({
     navStatus: false,
   },
 })
+
+function goPage(path) {
+  state.mobile.navStatus = false
+  router.push({ path })
+}
 </script>
 
 <template>
@@ -28,12 +34,12 @@ const state = reactive({
     <!-- mobile nav -->
     <div
       v-show="state.mobile.navStatus"
-      class="absolute z-10 bg-black opacity-50 inset-0"
+      class="fixed z-10 bg-black opacity-50 inset-0"
       @click="state.mobile.navStatus = false"
     ></div>
     <div
       v-show="state.mobile.navStatus"
-      class="bg-white absolute z-20 top-0 left-0 p-4 w-full"
+      class="bg-white fixed z-40 top-0 left-0 p-4 w-full"
     >
       <div class="close-btn" @click="state.mobile.navStatus = false">
         <svg
@@ -66,12 +72,12 @@ const state = reactive({
             my-4
           "
         >
-          <router-link
+          <div
             class="text-shadow-lg tracking-wider"
-            :to="Object.values(nav)[0]"
+            @click="goPage(Object.values(nav)[0])"
           >
             {{ Object.keys(nav)[0] }}
-          </router-link>
+          </div>
         </li>
       </ul>
     </div>
@@ -79,7 +85,7 @@ const state = reactive({
     <!-- web nav -->
     <nav
       class="
-        absolute
+        fixed
         top-0
         inset-x-0
         flex
@@ -89,6 +95,7 @@ const state = reactive({
         py-4
         sm:pt-0 sm:px-8 sm:py-0
         xl:px-36
+        z-30
       "
       :class="[
         {
