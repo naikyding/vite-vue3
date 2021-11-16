@@ -5,15 +5,15 @@ module.exports = {
     extend: {
       colors: {
         primary: '#E8CB89',
-        priamry2: '#7BAEBE',
+        primary2: '#7BAEBE',
         primary3: '#666666',
-  
+
         secondary: '#A6CDE0',
         secondary2: '#F8C3A1',
         secondary3: '#B4B4B4',
-  
-        'input-bg': '#EBEBEB'
-      }
+
+        'input-bg': '#EBEBEB',
+      },
     },
   },
   variants: {

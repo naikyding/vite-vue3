@@ -14,6 +14,7 @@ import coverImg from '../../assets/images/cover4.jpeg'
 
 import PagePagination from '../../components/PagePagination.vue'
 import cities from '../../utils/cityData'
+import { pageData } from '../../utils/pagePagination'
 import selectArrow from '../../assets/icon/arrangement.svg'
 import noImage from '../../assets/icon/no-image.svg'
 import noPic from '@/assets/images/no-image.jpeg'
@@ -22,8 +23,11 @@ const store = useStore()
 SwiperCore.use([Pagination, Navigation])
 
 // 取得各別旅遊景點
-const getOneCityTourism = (filterData) =>
-  store.dispatch('get_tourism', filterData)
+const getOneCityTourism = async (filterData) => {
+  await store.dispatch('get_tourism', filterData)
+  await setFilterData(pageData(stateTourismData.value, page.active))
+  page.active = 1
+}
 
 // 取得所有旅遊景點
 const getAllTourism = () => store.dispatch('get_all_tourism', { $top: 8 })
@@ -43,19 +47,33 @@ const state = reactive({
   },
 })
 
+const page = reactive({
+  // 目前頁面
+  active: 1,
+  filterData: [], // 向上取
+  total: computed(() => Math.ceil(stateTourismData.value.length / 8)),
+})
+
+function setFilterData(resData = []) {
+  page.filterData = resData
+}
+
+function setActivePage(emitPage) {
+  if (emitPage < 1 || emitPage > page.total) return false
+  page.active = emitPage
+  setFilterData(pageData(stateTourismData.value, page.active))
+}
+
 const stateTourismData = computed(() => store.state.attractions)
 const stateAllTourismData = computed(() => store.state.allAttractions)
-const stateTourismDataAllPage = computed(
-  () => stateTourismData.value.length / 8
-)
 
 function searchKeyword(e, keyword = state.form.keyword) {
   if (!keyword) return null
   return `(contains(Name, '${keyword}') or contains(DescriptionDetail, '${keyword}'))`
 }
 
-onMounted(async () => {
-  await getOneCityTourism({ city: state.form.city, $top: 30 })
+onMounted(() => {
+  getOneCityTourism({ city: state.form.city })
 })
 </script>
 
@@ -335,7 +353,7 @@ onMounted(async () => {
         <!-- result items -->
         <div class="result-items col-span-3 mt-3 md:mt-0">
           <figure
-            v-for="item in stateTourismData"
+            v-for="item in page.filterData"
             :key="item.ID"
             class="
               bg-white
@@ -439,7 +457,7 @@ onMounted(async () => {
                 <div class="location flex items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 text-priamry2 mr-1"
+                    class="h-5 w-5 text-primary2 mr-1"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -455,7 +473,7 @@ onMounted(async () => {
                 <div class="hidden md:flex open-time ml-4 items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 text-priamry2 mr-1"
+                    class="h-5 w-5 text-primary2 mr-1"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -478,8 +496,12 @@ onMounted(async () => {
           </figure>
         </div>
 
-        <div class="mb-5">
-          <PagePagination :all-page="stateTourismDataAllPage" />
+        <div class="mb-6">
+          <PagePagination
+            :all-page="page.total"
+            :active-page="page.active"
+            @set-page="setActivePage"
+          />
         </div>
       </section>
     </div>

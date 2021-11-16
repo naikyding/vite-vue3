@@ -3,7 +3,7 @@
 <template>
   <div
     class="
-      bg-priamry2
+      bg-primary2
       h-20
       flex
       justify-center
