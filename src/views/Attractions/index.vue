@@ -84,7 +84,7 @@ onMounted(() => {
           :navigation="true"
           :loop="true"
           :centered-slides="true"
-          :initial-slide="2"
+          :initial-slide="3"
           class="mySwiper h-60"
         >
           <swiper-slide
