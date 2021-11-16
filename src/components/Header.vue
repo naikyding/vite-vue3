@@ -1,6 +1,6 @@
 <script setup>
-import {reactive} from 'vue'
-import {useRoute} from 'vue-router'
+import { reactive } from 'vue'
+import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const routeName = route.name
@@ -11,11 +11,11 @@ const state = reactive({
     name: 'TAIWAN TRAVEL',
   },
   navs: [
-    {旅遊情報: '#'},
-    {景點查詢: '/attractions'},
-    {美食推薦: '#'},
-    {旅宿資訊: '#'},
-    {節慶活動: '#'},
+    { 旅遊情報: '#' },
+    { 景點查詢: '/attractions' },
+    { 美食推薦: '#' },
+    { 旅宿資訊: '#' },
+    { 節慶活動: '#' },
   ],
   mobile: {
     navStatus: false,
@@ -28,14 +28,14 @@ const state = reactive({
     <!-- mobile nav -->
     <div
       v-show="state.mobile.navStatus"
-      @click="state.mobile.navStatus = false"
       class="absolute z-10 bg-black opacity-50 inset-0"
+      @click="state.mobile.navStatus = false"
     ></div>
     <div
       v-show="state.mobile.navStatus"
       class="bg-white absolute z-20 top-0 left-0 p-4 w-full"
     >
-      <div @click="state.mobile.navStatus = false" class="close-btn">
+      <div class="close-btn" @click="state.mobile.navStatus = false">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-8 w-8"
@@ -53,6 +53,8 @@ const state = reactive({
       </div>
       <ul class="px-16">
         <li
+          v-for="nav in state.navs"
+          :key="nav"
           class="
             block
             text-center text-primary3
@@ -63,8 +65,6 @@ const state = reactive({
             rounded-lg
             my-4
           "
-          v-for="nav in state.navs"
-          :key="nav"
         >
           <router-link
             class="text-shadow-lg tracking-wider"
@@ -97,7 +97,10 @@ const state = reactive({
       ]"
     >
       <!-- mobile menu btn -->
-      <button @click="state.mobile.navStatus = true" class="text-white sm:hidden">
+      <button
+        class="text-white sm:hidden"
+        @click="state.mobile.navStatus = true"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-6 w-6"
@@ -120,7 +123,7 @@ const state = reactive({
 
       <!-- nav items -->
       <ul class="items-center h-20 hidden sm:flex">
-        <li class="sm:px-1 lg:px-6" v-for="nav in state.navs" :key="nav">
+        <li v-for="nav in state.navs" :key="nav" class="sm:px-1 lg:px-6">
           <router-link
             :to="Object.values(nav)[0]"
             class="text-white text-shadow-lg tracking-wider"

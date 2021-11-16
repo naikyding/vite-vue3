@@ -1,10 +1,10 @@
 <script setup>
-import {reactive, onMounted, computed} from 'vue'
-import {useStore} from 'vuex'
+import { reactive, onMounted, computed } from 'vue'
+import { useStore } from 'vuex'
 
 // swiper
-import {Swiper, SwiperSlide} from 'swiper/vue'
-import SwiperCore, {Pagination, Navigation} from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import SwiperCore, { Pagination, Navigation } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
@@ -12,6 +12,7 @@ import 'swiper/css/scrollbar'
 
 import Header from '../../components/Header.vue'
 import coverImg from '../../assets/images/cover4.jpeg'
+
 import cities from '../../utils/cityData'
 import selectArrow from '../../assets/icon/arrangement.svg'
 import noImage from '../../assets/icon/no-image.svg'
@@ -26,16 +27,13 @@ const getOneCityTourism = (filterData) =>
 // getAllTourism()
 
 const state = reactive({
-  cover: {backgroundImage: `url(${coverImg})`},
+  cover: { backgroundImage: `url(${coverImg})` },
+
   title: ['熱門景點', '景點快搜', '搜尋結果'],
   cities,
 
   // 篩選類別
-  class: [
-    // {'option1': '1'},
-    // {'option2': '2'},
-    // {'option3': '3'},
-  ],
+  class: [{ option1: '1' }, { option2: '2' }, { option3: '3' }],
 
   // 篩選 select && radio
   form: {
@@ -52,14 +50,7 @@ function searchKeyword(e, keyword = state.form.keyword) {
 }
 
 onMounted(() => {
-  getOneCityTourism({city: state.form.city, $top: 8})
-
-  const onSwiper = (swiper) => {
-    console.log(swiper)
-  }
-  const onSlideChange = () => {
-    console.log('slide change')
-  }
+  getOneCityTourism({ city: state.form.city, $top: 8 })
 })
 </script>
 
@@ -87,11 +78,11 @@ onMounted(() => {
       </h2>
       <div class="slider h-56 bg-red-400">
         <swiper
-          :slidesPerView="3"
-          :spaceBetween="30"
-          :slidesPerGroup="3"
+          :slides-per-view="3"
+          :space-between="30"
+          :slides-per-group="3"
           :loop="true"
-          :loopFillGroupWithBlank="true"
+          :loop-fill-group-with-blank="true"
           :pagination="{
             clickable: true,
           }"
@@ -269,7 +260,7 @@ onMounted(() => {
             <span class="text-primary3">全部</span>
           </label>
 
-          <label class="block" v-for="item in state.class" :key="item">
+          <label v-for="item in state.class" :key="item" class="block">
             <input
               v-model="state.form.class"
               :value="Object.values(item)[0]"
@@ -283,6 +274,7 @@ onMounted(() => {
           <!-- search btn -->
           <div class="text-center mt-5">
             <button
+              class="bg-primary rounded-xl text-white px-10 py-3"
               @click="
                 getOneCityTourism({
                   city: state.form.city,
@@ -290,7 +282,6 @@ onMounted(() => {
                   $filter: searchKeyword(state.form.keyword),
                 })
               "
-              class="bg-primary rounded-xl text-white px-10 py-3"
             >
               SEARCH
             </button>
@@ -307,6 +298,8 @@ onMounted(() => {
         <!-- result items -->
         <div class="result-items col-span-3 mt-3 md:mt-0">
           <figure
+            v-for="item in stateTourismData"
+            :key="item.ID"
             class="
               bg-white
               border
@@ -319,8 +312,6 @@ onMounted(() => {
               h-32
               md:h-60
             "
-            v-for="item in stateTourismData"
-            :key="item.ID"
           >
             <img
               class="h-auto object-cover object-center w-40 lg:w-80"
