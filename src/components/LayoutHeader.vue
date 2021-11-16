@@ -126,7 +126,9 @@ function goPage(path) {
       </button>
 
       <!-- website logo -->
-      <a href="/" class="text-white text-2xl">{{ state.website.name }}</a>
+      <router-link to="/" class="text-white text-2xl">{{
+        state.website.name
+      }}</router-link>
 
       <!-- nav items -->
       <ul class="items-center h-20 hidden sm:flex">

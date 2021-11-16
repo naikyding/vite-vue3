@@ -1,15 +1,25 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
+import LayoutMain from '../views/LayoutMain.vue'
+import Index from '../views/index.vue'
+
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: () => import('../views/index.vue'),
-  },
-  {
-    path: '/attractions',
-    name: 'attractions',
-    component: () => import('../views/Attractions/index.vue'),
+    name: 'layout',
+    component: LayoutMain,
+    children: [
+      {
+        path: '',
+        name: 'index',
+        component: Index,
+      },
+      {
+        path: 'attractions',
+        name: 'attractions',
+        component: () => import('../views/Attractions/index.vue'),
+      },
+    ],
   },
 ]
 const router = createRouter({
