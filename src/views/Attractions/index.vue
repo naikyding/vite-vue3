@@ -16,15 +16,18 @@ import coverImg from '../../assets/images/cover4.jpeg'
 import cities from '../../utils/cityData'
 import selectArrow from '../../assets/icon/arrangement.svg'
 import noImage from '../../assets/icon/no-image.svg'
+import noPic from '@/assets/images/no-image.jpeg'
 
 const store = useStore()
 SwiperCore.use([Pagination, Navigation])
 
-// 取得所有旅遊景點
-// const getAllTourism = () => store.dispatch('get_all_tourism', {$top: 8})
+// 取得各別旅遊景點
 const getOneCityTourism = (filterData) =>
   store.dispatch('get_tourism', filterData)
-// getAllTourism()
+
+// 取得所有旅遊景點
+const getAllTourism = () => store.dispatch('get_all_tourism', { $top: 8 })
+getAllTourism()
 
 const state = reactive({
   cover: { backgroundImage: `url(${coverImg})` },
@@ -42,7 +45,9 @@ const state = reactive({
     keyword: '',
   },
 })
+
 const stateTourismData = computed(() => store.state.attractions)
+const stateAllTourismData = computed(() => store.state.allAttractions)
 
 function searchKeyword(e, keyword = state.form.keyword) {
   if (!keyword) return null
@@ -72,32 +77,67 @@ onMounted(() => {
     </p>
 
     <!-- 熱門景點 -->
-    <section class="mt-5">
-      <h2 class="text-xl text-secondary">
+    <section class="my-5">
+      <h2 class="text-xl text-secondary mb-3">
         {{ state.title[0] }}
       </h2>
-      <div class="slider h-56 bg-red-400">
+      <div class="slider">
         <swiper
-          :slides-per-view="3"
-          :space-between="30"
-          :slides-per-group="3"
-          :loop="true"
+          :slides-per-view="1.9"
+          :space-between="80"
+          :slides-per-group="1"
           :loop-fill-group-with-blank="true"
-          :pagination="{
-            clickable: true,
-          }"
           :navigation="true"
-          class="mySwiper"
+          :loop="true"
+          :centered-slides="true"
+          :initial-slide="2"
+          class="mySwiper h-60"
         >
-          <swiper-slide>Slide 1</swiper-slide
-          ><swiper-slide>Slide 2</swiper-slide
-          ><swiper-slide>Slide 3</swiper-slide
-          ><swiper-slide>Slide 4</swiper-slide
-          ><swiper-slide>Slide 5</swiper-slide
-          ><swiper-slide>Slide 6</swiper-slide
-          ><swiper-slide>Slide 7</swiper-slide
-          ><swiper-slide>Slide 8</swiper-slide
-          ><swiper-slide>Slide 9</swiper-slide>
+          <swiper-slide
+            v-for="item in stateAllTourismData"
+            :key="item.ID"
+            class="bg-red-3000 relative"
+          >
+            <img
+              class="w-full h-full object-cover object-center rounded-3xl"
+              :src="item.Picture.PictureUrl1 || noPic"
+              :alt="item.Name"
+            />
+            <div
+              class="
+                absolute
+                w-full
+                bottom-0
+                tracking-wider
+                left-0
+                slide-text
+                text-white
+              "
+            >
+              <div class="flex w-full justify-between p-4">
+                <span class="text-shadow-lg">
+                  {{ item.Name }}
+                </span>
+                <button class="flex">
+                  <span class="mr-2 text-shadow-lg"> 看更多 </span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 5l7 7-7 7M5 5l7 7-7 7"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </swiper-slide>
         </swiper>
       </div>
     </section>
@@ -196,7 +236,7 @@ onMounted(() => {
                   pl-10
                   rounded-xl
                   leading-tight
-                  focus:outline-none focus:border-primary
+                  focus:border-primary focus:outline-none
                 "
               >
                 <option>排序: 熱門度</option>
