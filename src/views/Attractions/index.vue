@@ -1,5 +1,6 @@
 <script setup>
 import { reactive, onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 
 // swiper
@@ -20,10 +21,16 @@ import noImage from '../../assets/icon/no-image.svg'
 import noPic from '@/assets/images/no-image.jpeg'
 
 const store = useStore()
+const route = useRoute()
 SwiperCore.use([Pagination, Navigation])
 
 // 取得各別旅遊景點
 const getOneCityTourism = async (filterData) => {
+  const { city } = filterData
+  if (!Object.values(cities).includes(city)) {
+    state.form.city = 'Taipei'
+    filterData.city = 'Taipei'
+  }
   await store.dispatch('get_tourism', filterData)
   await setFilterData(pageData(stateTourismData.value, page.active))
   page.active = 1
@@ -38,7 +45,7 @@ const state = reactive({
   title: ['熱門景點', '景點快搜', '搜尋結果'],
   cities,
   // 篩選類別
-  class: [{ option1: '1' }, { option2: '2' }, { option3: '3' }],
+  class: [],
   // 篩選 select && radio
   form: {
     city: 'Taipei',
@@ -73,6 +80,7 @@ function searchKeyword(e, keyword = state.form.keyword) {
 }
 
 onMounted(() => {
+  if (route.query.city) state.form.city = route.query.city
   getOneCityTourism({ city: state.form.city })
 })
 </script>

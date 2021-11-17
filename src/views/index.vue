@@ -1,17 +1,34 @@
 <script setup>
 import { reactive } from 'vue'
+import { useRouter } from 'vue-router'
 
 import cover1 from '../assets/images/cover1.jpeg'
 import taiwanLogo from '../assets/images/taiwan_logo_white.svg'
 import cities from '../utils/cityData'
+
+const router = useRouter()
 
 const state = reactive({
   data: [],
   website: {
     cover: { backgroundImage: `url(${cover1})` },
   },
+  type: [{ 景點: 'attractions' }],
   cities,
+
+  form: {
+    type: 'attractions',
+    city: 'Taipei',
+  },
 })
+
+function search(type, city) {
+  if (!type || !city) return false
+  router.push({
+    name: type,
+    query: { city },
+  })
+}
 </script>
 
 <template>
@@ -51,10 +68,10 @@ const state = reactive({
           md:translate-y-0
         "
       >
-        <!-- select -->
+        <!-- select 類型 -->
         <div class="select-area w-full relative">
           <select
-            name=""
+            v-model="state.form.type"
             class="
               w-full
               appearance-none
@@ -69,8 +86,12 @@ const state = reactive({
               focus:outline-none focus:border-primary
             "
           >
-            <option v-for="(city, index) in cities" :key="city" :value="city">
-              {{ index }}
+            <option
+              v-for="(item, index) in state.type"
+              :key="index"
+              :value="Object.values(item)[0]"
+            >
+              {{ Object.keys(item)[0] }}
             </option>
           </select>
           <div
@@ -97,10 +118,10 @@ const state = reactive({
           </div>
         </div>
 
-        <!-- select -->
+        <!-- select 地區 -->
         <div class="select-area w-full relative mx-0 md:mx-4 my-3 md:my-0">
           <select
-            name=""
+            v-model="state.form.city"
             class="
               w-full
               appearance-none
@@ -144,7 +165,10 @@ const state = reactive({
         </div>
 
         <!-- search btn -->
-        <button class="bg-primary rounded-xl text-white px-8 py-3">
+        <button
+          class="bg-primary rounded-xl text-white px-8 py-3"
+          @click="search(state.form.type, state.form.city)"
+        >
           SEARCH
         </button>
       </div>
