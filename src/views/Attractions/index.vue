@@ -19,6 +19,7 @@ import { pageData } from '../../utils/pagePagination'
 import selectArrow from '../../assets/icon/arrangement.svg'
 import noImage from '../../assets/icon/no-image.svg'
 import noPic from '@/assets/images/no-image.jpeg'
+import router from '../../router'
 
 const store = useStore()
 const route = useRoute()
@@ -79,6 +80,14 @@ function searchKeyword(e, keyword = state.form.keyword) {
   return `(contains(Name, '${keyword}') or contains(DescriptionDetail, '${keyword}'))`
 }
 
+function goAttractionsItem(id, city) {
+  router.push({
+    name: 'attractions-item',
+    params: { id },
+    query: { city },
+  })
+}
+
 onMounted(() => {
   if (route.query.city) state.form.city = route.query.city
   getOneCityTourism({ city: state.form.city })
@@ -92,7 +101,7 @@ onMounted(() => {
     :style="state.cover"
   />
 
-  <div class="px-4 sm:px-8 xl:px-36">
+  <div class="px-4 sm:px-8 xl:px-36 tracking-widest">
     <!-- URL PATH -->
     <p class="py-2 text-xs">
       <router-link to="/"> 首頁 </router-link>
@@ -374,7 +383,9 @@ onMounted(() => {
               md:mb-10
               h-32
               md:h-60
+              cursor-pointer
             "
+            @click="goAttractionsItem(item.ID, state.form.city)"
           >
             <img
               class="h-auto object-cover object-center w-40 lg:w-80"

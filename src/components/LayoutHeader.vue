@@ -99,7 +99,8 @@ function goPage(path) {
       "
       :class="[
         {
-          'bg-secondary': routeName === 'attractions',
+          'bg-secondary':
+            routeName === 'attractions' || routeName === 'attractions-item',
         },
       ]"
     >
