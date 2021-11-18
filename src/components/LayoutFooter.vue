@@ -10,6 +10,8 @@
       items-center
       text-white
       tracking-widest
+      px-3
+      text-center
     "
   >
     TaiwanTravel © 2021 Designer Vum. Engineer Naiky. All rights reserved.
