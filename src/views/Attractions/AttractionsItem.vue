@@ -39,7 +39,7 @@ const state = reactive({
     {
       icon: map,
       text: 'Name',
-      map: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.151145376335!2d121.53167925104871!3d25.062865783880103!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a959a9ce781b%3A0xb0c2ef0be716c094!2z6KGM5aSp5a6u!5e0!3m2!1szh-TW!2stw!4v1637142280547!5m2!1szh-TW!2stw" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>',
+      src: 'Name',
     },
   ],
 
@@ -86,7 +86,7 @@ onMounted(() => {
           <template v-for="(tag, index) in 3" :key="index">
             <li
               v-if="resData[`Class${index + 1}`]"
-              class="text-sm px-3 py-1 bg-primary rounded-xl"
+              class="text-sm px-2 bg-primary rounded-xl"
               :class="{ 'mx-3': index === 1 }"
             >
               {{ resData[`Class${index + 1}`] }}
@@ -115,8 +115,11 @@ onMounted(() => {
 
               <template v-else>
                 <div class="h-60 w-full">
+                  <!-- https://www.google.com/maps/embed/v1/place?key={YOUR_API_KEY}&q=台北101 -->
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.151145376335!2d121.53167925104871!3d25.062865783880103!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a959a9ce781b%3A0xb0c2ef0be716c094!2z6KGM5aSp5a6u!5e0!3m2!1szh-TW!2stw!4v1637142999611!5m2!1szh-TW!2stw"
+                    :src="`https://www.google.com/maps/embed/v1/place?key=AIzaSyBwvVItnaobSCJxNFGJoHlc2njSYthTfpU&q=${
+                      resData[item.src]
+                    }`"
                     width="100%"
                     height="100%"
                     style="border: 0"
