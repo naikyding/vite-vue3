@@ -124,7 +124,7 @@ onMounted(() => {
           :loop="true"
           :centered-slides="true"
           :initial-slide="3"
-          class="mySwiper h-60"
+          class="mySwiper h-60 cursor-pointer"
         >
           <swiper-slide
             v-for="item in stateAllTourismData"
