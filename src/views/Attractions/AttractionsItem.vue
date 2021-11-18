@@ -14,6 +14,8 @@ import map from '@/assets/icon/map.svg'
 const route = useRoute()
 const store = useStore()
 
+const googleMapApiKey = import.meta.env.VITE_GOOGLE_MAP_API_KEY
+
 const state = reactive({
   cover: { backgroundImage: `url(${coverImg})` },
 
@@ -156,7 +158,7 @@ onMounted(() => {
       <div class="h-60 w-full lg:col-span-5">
         <!-- https://www.google.com/maps/embed/v1/place?key={YOUR_API_KEY}&q=台北101 -->
         <iframe
-          :src="`https://www.google.com/maps/embed/v1/place?key=AIzaSyBwvVItnaobSCJxNFGJoHlc2njSYthTfpU&q=${resData?.Name}`"
+          :src="`https://www.google.com/maps/embed/v1/place?key=${googleMapApiKey}&q=${resData?.Name}`"
           width="100%"
           height="100%"
           style="border: 0"
