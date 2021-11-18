@@ -129,7 +129,7 @@ onMounted(() => {
           <swiper-slide
             v-for="item in stateAllTourismData"
             :key="item.ID"
-            class="bg-red-3000 relative"
+            class="bg-red-3000 relative cursor-pointer"
             @click="goAttractionsItem(item.ID)"
           >
             <img
