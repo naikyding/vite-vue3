@@ -130,6 +130,7 @@ onMounted(() => {
             v-for="item in stateAllTourismData"
             :key="item.ID"
             class="bg-red-3000 relative"
+            @click="goAttractionsItem(item.ID)"
           >
             <img
               class="w-full h-full object-cover object-center rounded-3xl"

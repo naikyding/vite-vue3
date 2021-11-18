@@ -1,6 +1,11 @@
 // import cities from '../utils/cityData.json'
 import store from '../store'
 
+// 取得全部旅遊景點
+export async function getAllTourism(filterData) {
+  await store.dispatch('get_all_tourism', filterData)
+}
+
 // 取得各別旅遊景點
 export async function getOneCityTourism(filterData) {
   await store.dispatch('get_tourism', filterData)

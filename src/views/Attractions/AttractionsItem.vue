@@ -1,10 +1,14 @@
 <script setup>
 import { reactive, onMounted, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import coverImg from '../../assets/images/cover4.jpeg'
-import { getOneCityTourism, searchKeyword } from '../../utils/attractions'
+import {
+  getOneCityTourism,
+  searchKeyword,
+  getAllTourism,
+} from '../../utils/attractions'
 
 import infoIcon from '@/assets/icon/information.svg'
 import link from '@/assets/icon/link.svg'
@@ -13,7 +17,6 @@ import time from '@/assets/icon/time.svg'
 import map from '@/assets/icon/map.svg'
 
 const route = useRoute()
-const router = useRouter()
 const store = useStore()
 
 const state = reactive({
@@ -49,11 +52,10 @@ const state = reactive({
   },
 })
 
-const resData = computed(() => store.state.attractions[0])
+const resData = computed(() => store.state.allAttractions[0])
 
 onMounted(() => {
-  if (!state.form.city) router.push({ name: 'attractions' })
-  getOneCityTourism(state.form)
+  getAllTourism({ $filter: state.form.$filter })
 })
 </script>
 
