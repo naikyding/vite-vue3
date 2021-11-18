@@ -3,9 +3,13 @@
 import { request } from './index'
 
 // 取得[所有]觀光景點資料
-export const getAllTourismAPI = ({ $top = '30', $format = 'JSON' }) =>
+export const getAllTourismAPI = ({
+  $top = '30',
+  $format = 'JSON',
+  $filter = null,
+}) =>
   request.get(`ScenicSpot`, {
-    params: { $top, $format },
+    params: { $top, $format, $filter },
   })
 
 // 取得[指定]觀光景點資料
