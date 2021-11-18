@@ -137,6 +137,7 @@ function goPage(path) {
           <router-link
             :to="Object.values(nav)[0]"
             class="text-white text-shadow-lg tracking-wider"
+            :class="{ 'cursor-not-allowed': Object.values(nav)[0] === '#' }"
           >
             {{ Object.keys(nav)[0] }}
           </router-link>

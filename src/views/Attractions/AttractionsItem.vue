@@ -2,7 +2,6 @@
 import { reactive, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { Swiper, SwiperSlide } from 'swiper/vue'
 import coverImg from '../../assets/images/cover4.jpeg'
 import { searchKeyword, getAllTourism } from '../../utils/attractions'
 
@@ -169,21 +168,7 @@ onMounted(() => {
     </section>
   </div>
 
-  <div>
-    <swiper
-      :slides-per-view="1.9"
-      :space-between="80"
-      :slides-per-group="1"
-      :loop-fill-group-with-blank="true"
-      :navigation="true"
-      :loop="true"
-      :centered-slides="true"
-      :initial-slide="3"
-      class="mySwiper h-60"
-    >
-      <SwiperSlide>1</SwiperSlide>
-    </swiper>
-  </div>
+  <div></div>
 </template>
 
 <style lang="scss" scoped></style>
