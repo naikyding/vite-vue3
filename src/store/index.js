@@ -21,7 +21,6 @@ const mutations = {
 
 const actions = {
   async get_all_tourism({ commit }, filterData) {
-    console.log(filterData)
     const res = await getAllTourismAPI(filterData)
     if (res.status === 200) commit('SET_ALL_SEARCH_TOURISM', res.data)
   },

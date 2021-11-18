@@ -4,11 +4,7 @@ import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import coverImg from '../../assets/images/cover4.jpeg'
-import {
-  getOneCityTourism,
-  searchKeyword,
-  getAllTourism,
-} from '../../utils/attractions'
+import { searchKeyword, getAllTourism } from '../../utils/attractions'
 
 import infoIcon from '@/assets/icon/information.svg'
 import link from '@/assets/icon/link.svg'
@@ -66,18 +62,21 @@ onMounted(() => {
     :style="state.cover"
   />
 
-  <div class="px-4 sm:px-8 xl:px-36 tracking-widest text-gray-500">
+  <div
+    v-if="resData"
+    class="px-4 sm:px-8 xl:px-36 tracking-widest text-gray-500"
+  >
     <!-- URL PATH -->
     <p class="py-2 text-xs">
       <router-link to="/"> 首頁 </router-link>
       >
-      <router-link to="/"> 景點查詢 </router-link>
+      <router-link to="/attractions"> 景點查詢 </router-link>
       >
       <span class="text-secondary"> {{ resData?.Name }} </span>
     </p>
 
     <!-- attraction item -->
-    <section class="mt-16 grid grid-cols-1 lg:grid-cols-5 gap-4">
+    <section class="mt-10 grid grid-cols-1 lg:grid-cols-5 gap-4">
       <!-- info -->
       <div class="attractions__info lg:col-span-2">
         <!-- 景點名稱 -->
@@ -96,8 +95,17 @@ onMounted(() => {
           </template>
         </ul>
 
+        <!-- MIBOLE 景點地圖 -->
+        <div class="attractions__slider lg:col-span-3 block lg:hidden my-6">
+          <img
+            :src="resData.Picture.PictureUrl1"
+            :alt="resData.Name"
+            class="rounded-lg w-full h-90 object-cover object-center"
+          />
+        </div>
+
         <!-- 詳細資料 -->
-        <div class="detail mt-10">
+        <div class="detail mt-0 lg:mt-10">
           <h2 class="text-lg mb-6 leading-7">景點資訊</h2>
           <ul v-if="resData">
             <li
@@ -115,22 +123,7 @@ onMounted(() => {
                 </div>
               </template>
 
-              <template v-else>
-                <div class="h-60 w-full">
-                  <!-- https://www.google.com/maps/embed/v1/place?key={YOUR_API_KEY}&q=台北101 -->
-                  <iframe
-                    :src="`https://www.google.com/maps/embed/v1/place?key=AIzaSyBwvVItnaobSCJxNFGJoHlc2njSYthTfpU&q=${
-                      resData[item.src]
-                    }`"
-                    width="100%"
-                    height="100%"
-                    style="border: 0"
-                    allowfullscreen="true"
-                    loading="lazy"
-                    class="rounded-lg"
-                  ></iframe>
-                </div>
-              </template>
+              <template v-else> </template>
 
               <!-- 連結 -->
               <a
@@ -147,10 +140,32 @@ onMounted(() => {
           </ul>
         </div>
       </div>
-      <!-- slider -->
-      <div class="attractions__slider bg-blue-400 lg:col-span-3">1</div>
+      <!-- 景點圖片 -->
+      <div class="attractions__slider lg:col-span-3 hidden lg:block">
+        <img
+          :src="resData.Picture.PictureUrl1"
+          :alt="resData.Name"
+          class="rounded-lg w-full h-90 object-cover object-center"
+        />
+      </div>
       <!-- description -->
-      <div class="attractions__dec bg-red-400 lg:col-span-5">1</div>
+      <div class="attractions__dec lg:col-span-5">
+        <h2 class="text-lg mb-6 leading-7">景點介紹</h2>
+        <p>{{ resData.DescriptionDetail }}</p>
+      </div>
+
+      <div class="h-60 w-full lg:col-span-5">
+        <!-- https://www.google.com/maps/embed/v1/place?key={YOUR_API_KEY}&q=台北101 -->
+        <iframe
+          :src="`https://www.google.com/maps/embed/v1/place?key=AIzaSyBwvVItnaobSCJxNFGJoHlc2njSYthTfpU&q=${resData?.Name}`"
+          width="100%"
+          height="100%"
+          style="border: 0"
+          allowfullscreen="true"
+          loading="lazy"
+          class="rounded-lg"
+        ></iframe>
+      </div>
     </section>
   </div>
 
