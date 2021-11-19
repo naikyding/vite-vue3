@@ -1,10 +1,14 @@
 <script setup>
-import { reactive, computed } from 'vue'
+import { reactive, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
 const routeName = computed(() => route.name)
+const scrollEv = computed(() => window.scrollY)
+watch(scrollEv, () => {
+  console.log(123)
+})
 
 const state = reactive({
   data: [],
@@ -22,9 +26,6 @@ const state = reactive({
     navStatus: false,
   },
 })
-
-const textColor = navDarkText()
-
 function navDarkText() {
   const darkPage = ['restaurant']
   return darkPage.includes(routeName.value) ? 'text-primary3' : 'text-white'
@@ -33,6 +34,15 @@ function navDarkText() {
 function goPage(path) {
   state.mobile.navStatus = false
   router.push({ path })
+}
+
+function navBgColorFn() {
+  const secondaryColorPage = ['attractions', 'attractions-item']
+  if (window.scrollY > 0) console.log(123)
+
+  if (window.scrollY > 0 && !secondaryColorPage.includes(routeName.value))
+    return 'bg-white'
+  return secondaryColorPage.includes(routeName.value) ? 'bg-secondary' : ''
 }
 </script>
 
@@ -104,17 +114,12 @@ function goPage(path) {
         xl:px-36
         z-30
       "
-      :class="[
-        {
-          'bg-secondary':
-            routeName === 'attractions' || routeName === 'attractions-item',
-        },
-      ]"
+      :class="navBgColorFn()"
     >
       <!-- mobile menu btn -->
       <button
         class="sm:hidden"
-        :class="textColor"
+        :class="navDarkText()"
         @click="state.mobile.navStatus = true"
       >
         <svg
@@ -135,7 +140,7 @@ function goPage(path) {
       </button>
 
       <!-- website logo -->
-      <router-link to="/" class="text-2xl" :class="textColor">
+      <router-link to="/" class="text-2xl" :class="navDarkText()">
         {{ state.website.name }}
       </router-link>
 
@@ -146,7 +151,7 @@ function goPage(path) {
             :to="Object.values(nav)[0]"
             class="text-shadow-lg tracking-wider"
             :class="[
-              textColor,
+              navDarkText(),
               { 'cursor-not-allowed': Object.values(nav)[0] === '#' },
             ]"
           >
