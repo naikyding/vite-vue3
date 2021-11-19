@@ -26,6 +26,12 @@ const routes = [
         name: 'attractions-item',
         component: () => import('../views/Attractions/AttractionsItem.vue'),
       },
+      // 美食
+      {
+        path: 'restaurant',
+        name: 'restaurant',
+        component: () => import('../views/Restaurant/index.vue'),
+      },
     ],
   },
 ]

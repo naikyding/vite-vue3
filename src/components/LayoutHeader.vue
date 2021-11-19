@@ -14,7 +14,7 @@ const state = reactive({
   navs: [
     { 旅遊情報: '#' },
     { 景點查詢: '/attractions' },
-    { 美食推薦: '#' },
+    { 美食推薦: '/restaurant' },
     { 旅宿資訊: '#' },
     { 節慶活動: '#' },
   ],
@@ -22,6 +22,13 @@ const state = reactive({
     navStatus: false,
   },
 })
+
+const textColor = navDarkText()
+
+function navDarkText() {
+  const darkPage = ['restaurant']
+  return darkPage.includes(routeName.value) ? 'text-primary3' : 'text-white'
+}
 
 function goPage(path) {
   state.mobile.navStatus = false
@@ -106,7 +113,8 @@ function goPage(path) {
     >
       <!-- mobile menu btn -->
       <button
-        class="text-white sm:hidden"
+        class="sm:hidden"
+        :class="textColor"
         @click="state.mobile.navStatus = true"
       >
         <svg
@@ -127,17 +135,20 @@ function goPage(path) {
       </button>
 
       <!-- website logo -->
-      <router-link to="/" class="text-white text-2xl">{{
-        state.website.name
-      }}</router-link>
+      <router-link to="/" class="text-2xl" :class="textColor">
+        {{ state.website.name }}
+      </router-link>
 
       <!-- nav items -->
       <ul class="items-center h-20 hidden sm:flex">
         <li v-for="nav in state.navs" :key="nav" class="sm:px-1 lg:px-6">
           <router-link
             :to="Object.values(nav)[0]"
-            class="text-white text-shadow-lg tracking-wider"
-            :class="{ 'cursor-not-allowed': Object.values(nav)[0] === '#' }"
+            class="text-shadow-lg tracking-wider"
+            :class="[
+              textColor,
+              { 'cursor-not-allowed': Object.values(nav)[0] === '#' },
+            ]"
           >
             {{ Object.keys(nav)[0] }}
           </router-link>
