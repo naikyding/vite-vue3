@@ -155,7 +155,7 @@ onMounted(() => {
         <p>{{ resData.DescriptionDetail }}</p>
       </div>
 
-      <div class="h-60 w-full lg:col-span-5">
+      <div class="h-60 w-full lg:col-span-5 mb-10">
         <!-- https://www.google.com/maps/embed/v1/place?key={YOUR_API_KEY}&q=台北101 -->
         <iframe
           :src="`https://www.google.com/maps/embed/v1/place?key=${googleMapApiKey}&q=${resData?.Name}`"
