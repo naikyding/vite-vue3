@@ -1,5 +1,9 @@
 <script setup>
 import { reactive } from 'vue'
+import { gsap } from 'gsap'
+
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
+gsap.registerPlugin(ScrollToPlugin)
 
 import cover from '../../assets/images/cover2.jpeg'
 import logo from '../../assets/images/logo-bark.svg'
@@ -10,6 +14,11 @@ const state = reactive({
     backgroundImage: `url(${cover})`,
   },
 })
+
+function goSectionArea() {
+  const target = document.querySelector('section')
+  gsap.to(window, { duration: 0.6, ease: 'power1', scrollTo: target })
+}
 </script>
 
 <template>
@@ -19,7 +28,7 @@ const state = reactive({
       <img class="px-10 md:px-0" :src="logo" alt="" />
     </div>
     <div class="absolute bottom-5 flex justify-center w-full slider-down">
-      <button>
+      <button @click="goSectionArea">
         <img :src="slideDown" alt="" />
       </button>
     </div>
