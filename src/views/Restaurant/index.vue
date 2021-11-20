@@ -4,6 +4,7 @@ import { gsap } from 'gsap'
 import cities from '../../utils/cityData'
 import { useStore } from 'vuex'
 import { pageData } from '../../utils/pagePagination'
+import noImage from '../../assets/images/no-image.jpeg'
 
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 gsap.registerPlugin(ScrollToPlugin)
@@ -20,10 +21,28 @@ const state = reactive({
   page: 1,
 
   form: {
-    city: 'NewTaipei',
+    city: 'NantouCounty',
   },
 })
-const resData = computed(() => pageData(store.state.restaurant, 1, 9))
+
+const activeCityNameZH = computed(() => {
+  let cityNameZh
+  for (let cityIndex in cities) {
+    if (cities[cityIndex] === state.form.city) cityNameZh = cityIndex
+  }
+  return cityNameZh
+})
+
+const resData = computed(() =>
+  pageData(
+    store.state.restaurant.filter(
+      (item) => item.City === activeCityNameZH.value
+    ),
+    1,
+    9
+  )
+)
+
 function goSectionArea() {
   const target = document.querySelector('section')
   gsap.to(window, { duration: 0.6, ease: 'power1', scrollTo: target })
@@ -143,15 +162,70 @@ onMounted(() => {
       md:grid-cols-9
       px-4
       md:px-[140px]
-      mb-20
+      mb-10
+      md:mb-20
     "
   >
-    <div v-for="item in resData" :key="item.ID" class="col-span-3">
+    <div
+      v-for="item in resData"
+      :key="item.ID"
+      class="relative col-span-3 min-h-[350px] md:min-h-[210px] max-h-[300px]"
+    >
+      <div class="absolute hover:bg-black opacity-70 inset-0 hover-trigger">
+        <div class="hover-target h-full text-white">
+          <div class="flex h-full flex-col justify-between">
+            <div class="btn px-7 pt-7">
+              <!-- MAP -->
+              <button class="border rounded-full p-1 mr-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </button>
+
+              <!-- PHONE -->
+              <button class="border rounded-full p-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div class="text text-center mb-8 px-2">
+              <div class="title text-lg">{{ item.Name }}</div>
+              <div class="title text-sm">{{ item.Address }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
       <img
         class="w-full h-full object-cover object-center"
-        :src="item.Picture.PictureUrl1"
+        :src="item.Picture.PictureUrl1 || noImage"
         alt=""
       />
     </div>
   </section>
 </template>
+
+<style scoped>
+.hover-trigger .hover-target {
+  display: none;
+}
+.hover-trigger:hover .hover-target {
+  display: block;
+}
+</style>
