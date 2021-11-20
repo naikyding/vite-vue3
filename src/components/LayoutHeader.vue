@@ -118,7 +118,7 @@ onMounted(() => {
         sm:pt-0 sm:px-8 sm:py-0
         xl:px-36
         z-30
-        transition-all
+        transition
         duration-500
       "
       :class="navBgColorFn()"
