@@ -28,3 +28,20 @@ export const getTourismAPI = ({
     },
   })
 }
+
+// 取得[指定城市]餐飲資料
+export const getAllRestaurantAPI = ({
+  city = 'NewTaipei',
+  $top = null,
+  $format = 'JSON',
+  $filter = null,
+}) => {
+  return request.get('Restaurant', {
+    params: {
+      city,
+      $top,
+      $format,
+      $filter,
+    },
+  })
+}

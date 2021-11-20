@@ -1,5 +1,4 @@
-export function pageData(allData, activePage) {
-  let pageGroup = 8
+export function pageData(allData, activePage, pageGroup = 8) {
   let endIndex = pageGroup * activePage - 1
   let startIndex = endIndex - pageGroup + 1
 

@@ -1,7 +1,9 @@
 <script setup>
-import { reactive } from 'vue'
+import { reactive, onMounted, computed } from 'vue'
 import { gsap } from 'gsap'
 import cities from '../../utils/cityData'
+import { useStore } from 'vuex'
+import { pageData } from '../../utils/pagePagination'
 
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 gsap.registerPlugin(ScrollToPlugin)
@@ -10,20 +12,26 @@ import cover from '../../assets/images/cover2.jpeg'
 import logo from '../../assets/images/logo-bark.svg'
 import slideDown from '../../assets/icon/slideDown_default.svg'
 
+const store = useStore()
 const state = reactive({
   coverImg: {
     backgroundImage: `url(${cover})`,
   },
+  page: 1,
 
   form: {
-    city: 'Taipei',
+    city: 'NewTaipei',
   },
 })
-
+const resData = computed(() => pageData(store.state.restaurant, 1, 9))
 function goSectionArea() {
   const target = document.querySelector('section')
   gsap.to(window, { duration: 0.6, ease: 'power1', scrollTo: target })
 }
+
+onMounted(() => {
+  store.dispatch('get_city_restaurant', state.form)
+})
 </script>
 
 <template>
@@ -39,10 +47,8 @@ function goSectionArea() {
     </div>
   </div>
 
-  <section
-    class="h-screen grid grid-cols-1 px-4 md:px-0 md:grid-cols-5 text-gray-500"
-  >
-    <div class="col-start-2 col-span-3 text-center mt-20 tracking-wider">
+  <section class="grid grid-cols-1 px-4 md:px-0 md:grid-cols-5 text-gray-500">
+    <div class="col-start-2 col-span-3 py-20 text-center tracking-wider">
       <p>
         民以食為天的臺灣，幾乎是三步一小吃店，五步一大餐廳，可說是應有盡有。近年來由於工商業的發展快速，臺灣吃的文化除了傳統的中式飲食方式外，也發展到中式速食連鎖店的經營方式，使得臺灣吃的藝術變得更加繁複。
       </p>
@@ -63,12 +69,21 @@ function goSectionArea() {
           gap-2
           md:grid-cols-2
           py-8
-          mb-14
           border-t-2 border-b-2
-          px-6
+          px-0
+          md:px-6
         "
       >
-        <div class="text flex items-center text-xl font-bold">
+        <div
+          class="
+            flex
+            justify-center
+            lg:justify-start
+            items-center
+            text-xl
+            font-bold
+          "
+        >
           您想找哪個地方的美食呢？
         </div>
 
@@ -119,6 +134,24 @@ function goSectionArea() {
         </div>
       </div>
     </div>
-    <div></div>
+  </section>
+
+  <section
+    class="
+      grid grid-cols-3
+      sm:grid-cols-6
+      md:grid-cols-9
+      px-4
+      md:px-[140px]
+      mb-20
+    "
+  >
+    <div v-for="item in resData" :key="item.ID" class="col-span-3">
+      <img
+        class="w-full h-full object-cover object-center"
+        :src="item.Picture.PictureUrl1"
+        alt=""
+      />
+    </div>
   </section>
 </template>

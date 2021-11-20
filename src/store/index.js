@@ -1,9 +1,15 @@
 import { createStore } from 'vuex'
-import { getAllTourismAPI, getTourismAPI } from '../request/api'
+import {
+  getAllTourismAPI,
+  getTourismAPI,
+  getAllRestaurantAPI,
+} from '../request/api'
 
 const state = () => ({
   allAttractions: [],
   attractions: [],
+
+  restaurant: [],
 })
 
 const getters = {}
@@ -17,6 +23,9 @@ const mutations = {
     state.allAttractions = []
     state.allAttractions = resData
   },
+  SET_CITY_RESTAURANT(state, resData) {
+    state.restaurant = resData
+  },
 }
 
 const actions = {
@@ -28,6 +37,11 @@ const actions = {
   async get_tourism({ commit }, filterData) {
     const res = await getTourismAPI(filterData)
     if (res.status === 200) commit('SET_SEARCH_TOURISM', res.data)
+  },
+
+  async get_city_restaurant({ commit }, filterData) {
+    const res = await getAllRestaurantAPI(filterData)
+    if (res.status === 200) commit('SET_CITY_RESTAURANT', res.data)
   },
 }
 
