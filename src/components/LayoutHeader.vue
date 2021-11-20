@@ -1,14 +1,11 @@
 <script setup>
-import { reactive, computed, onMounted, watch } from 'vue'
+import { reactive, computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
 const routeName = computed(() => route.name)
-const scrollEv = computed(() => window.scrollY)
-watch(scrollEv, () => {
-  console.log(123)
-})
+const scrollHeight = ref(0)
 
 const state = reactive({
   data: [],
@@ -38,12 +35,20 @@ function goPage(path) {
 
 function navBgColorFn() {
   const secondaryColorPage = ['attractions', 'attractions-item']
-  if (window.scrollY > 0) console.log(123)
 
-  if (window.scrollY > 0 && !secondaryColorPage.includes(routeName.value))
+  if (scrollHeight.value > 0 && !secondaryColorPage.includes(routeName.value))
     return 'bg-white'
   return secondaryColorPage.includes(routeName.value) ? 'bg-secondary' : ''
 }
+
+function scrollEv() {
+  scrollHeight.value = window.scrollY
+  navBgColorFn()
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', scrollEv)
+})
 </script>
 
 <template>
@@ -113,6 +118,8 @@ function navBgColorFn() {
         sm:pt-0 sm:px-8 sm:py-0
         xl:px-36
         z-30
+        transition-all
+        duration-500
       "
       :class="navBgColorFn()"
     >
