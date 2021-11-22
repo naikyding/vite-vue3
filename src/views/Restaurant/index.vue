@@ -23,6 +23,11 @@ const state = reactive({
   form: {
     city: 'NantouCounty',
   },
+
+  resData: [],
+
+  activePage: 1,
+  pageGroup: 9,
 })
 
 const activeCityNameZH = computed(() => {
@@ -33,14 +38,11 @@ const activeCityNameZH = computed(() => {
   return cityNameZh
 })
 
-const resData = computed(() =>
-  pageData(
-    store.state.restaurant.filter(
-      (item) => item.City === activeCityNameZH.value
-    ),
-    1,
-    9
-  )
+const stateDataFilterAcitveCity = computed(() =>
+  store.state.restaurant.filter((item) => item.City === activeCityNameZH.value)
+)
+const totalPage = computed(() =>
+  Math.ceil(stateDataFilterAcitveCity.value.length / state.pageGroup)
 )
 
 function goSectionArea() {
@@ -55,8 +57,33 @@ function goGoogleMap(name, city) {
   )
 }
 
-onMounted(() => {
-  store.dispatch('get_city_restaurant', state.form)
+function nextPage(resData, state, counts) {
+  if (state.activePage >= totalPage.value) return false
+  state.activePage++
+  state.resData = pageData(
+    stateDataFilterAcitveCity.value,
+    state.activePage,
+    counts
+  )
+}
+
+function prevPage(resData, state, counts) {
+  if (state.activePage < 2) return false
+  state.activePage--
+  state.resData = pageData(
+    stateDataFilterAcitveCity.value,
+    state.activePage,
+    counts
+  )
+}
+
+onMounted(async () => {
+  await store.dispatch('get_city_restaurant', state.form)
+  state.resData = pageData(
+    stateDataFilterAcitveCity.value,
+    state.activePage,
+    state.pageGroup
+  )
 })
 </script>
 
@@ -174,7 +201,7 @@ onMounted(() => {
     "
   >
     <div
-      v-for="item in resData"
+      v-for="item in state.resData"
       :key="item.ID"
       class="relative col-span-3 min-h-[350px] md:min-h-[210px] max-h-[300px]"
     >
@@ -229,6 +256,67 @@ onMounted(() => {
         :src="item.Picture.PictureUrl1 || noImage"
         alt=""
       />
+    </div>
+
+    <div class="col-span-9 px-4 py-4 flex justify-end">
+      <!-- 上一頁 -->
+      <button
+        class="
+          rounded-full
+          border
+          h-12
+          w-12
+          flex
+          justify-center
+          items-center
+          mr-10
+        "
+        :class="state.activePage < 2 ? 'border-gray-200' : 'border-primary2'"
+        @click="prevPage(stateDataFilterAcitveCity, state, state.pageGroup)"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          :class="state.activePage < 2 ? 'text-gray-200' : 'text-primary2'"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+      </button>
+
+      <!-- 下一頁 -->
+      <button
+        class="rounded-full border h-12 w-12 flex justify-center items-center"
+        :class="
+          state.activePage >= totalPage ? 'border-gray-200' : 'border-primary2'
+        "
+        @click="nextPage(stateDataFilterAcitveCity, state, state.pageGroup)"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          :class="
+            state.activePage >= totalPage ? 'text-gray-200' : 'text-primary2'
+          "
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </button>
     </div>
   </section>
 </template>

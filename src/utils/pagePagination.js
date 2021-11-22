@@ -1,7 +1,6 @@
 export function pageData(allData, activePage, pageGroup = 8) {
   let endIndex = pageGroup * activePage - 1
   let startIndex = endIndex - pageGroup + 1
-
   return allData.slice(startIndex, endIndex + 1)
 }
 
