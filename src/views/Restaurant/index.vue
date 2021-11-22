@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, onMounted, computed } from 'vue'
+import { reactive, onMounted, computed, watch } from 'vue'
 import { gsap } from 'gsap'
 import cities from '../../utils/cityData'
 import { useStore } from 'vuex'
@@ -30,6 +30,15 @@ const state = reactive({
   pageGroup: 9,
 })
 
+// 如果更新城市
+watch(
+  () => state.form.city,
+  () => {
+    state.activePage = 1
+    getCityRestaurantData()
+  }
+)
+
 const activeCityNameZH = computed(() => {
   let cityNameZh
   for (let cityIndex in cities) {
@@ -41,6 +50,7 @@ const activeCityNameZH = computed(() => {
 const stateDataFilterAcitveCity = computed(() =>
   store.state.restaurant.filter((item) => item.City === activeCityNameZH.value)
 )
+
 const totalPage = computed(() =>
   Math.ceil(stateDataFilterAcitveCity.value.length / state.pageGroup)
 )
@@ -54,6 +64,14 @@ function goGoogleMap(name, city) {
   window.open(
     `https://www.google.com/maps/search/?api=1&query=${name + city}`,
     'blacnk'
+  )
+}
+
+function getCityRestaurantData() {
+  state.resData = pageData(
+    stateDataFilterAcitveCity.value,
+    state.activePage,
+    state.pageGroup
   )
 }
 
@@ -79,11 +97,7 @@ function prevPage(resData, state, counts) {
 
 onMounted(async () => {
   await store.dispatch('get_city_restaurant', state.form)
-  state.resData = pageData(
-    stateDataFilterAcitveCity.value,
-    state.activePage,
-    state.pageGroup
-  )
+  getCityRestaurantData()
 })
 </script>
 
