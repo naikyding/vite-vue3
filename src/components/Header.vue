@@ -24,7 +24,7 @@ const state = reactive({
   },
 })
 function navDarkText() {
-  const darkPage = ['restaurant']
+  const darkPage = ['restaurant', 'room']
   return darkPage.includes(routeName.value) ? 'text-primary3' : 'text-white'
 }
 

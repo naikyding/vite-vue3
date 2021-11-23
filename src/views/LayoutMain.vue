@@ -1,5 +1,5 @@
 <script setup>
-import LayoutHeader from '@/components/LayoutHeader.vue'
+import Header from '@/components/Header.vue'
 import LayoutFooter from '@/components/LayoutFooter.vue'
 
 import { useRoute } from 'vue-router'
@@ -12,7 +12,7 @@ const noFooterPage = computed(() => !noFooterAry.includes(routerName.value))
 </script>
 
 <template>
-  <LayoutHeader />
+  <Header />
   <router-view />
   <LayoutFooter v-if="noFooterPage" />
 </template>

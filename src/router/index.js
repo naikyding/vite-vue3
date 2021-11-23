@@ -32,6 +32,11 @@ const routes = [
         name: 'restaurant',
         component: () => import('../views/Restaurant/index.vue'),
       },
+      {
+        path: 'room',
+        name: 'room',
+        component: () => import('../views/Room/index.vue'),
+      },
     ],
   },
 ]
