@@ -207,13 +207,14 @@ onMounted(async () => {
     class="
       grid grid-cols-3
       sm:grid-cols-6
-      md:grid-cols-9
+      lg:grid-cols-9
       px-4
       md:px-[140px]
       mb-10
       md:mb-20
     "
   >
+    <!-- 美食資料 -->
     <div
       v-for="item in state.resData"
       :key="item.ID"
@@ -272,7 +273,9 @@ onMounted(async () => {
       />
     </div>
 
-    <div class="col-span-9 px-4 py-4 flex justify-end">
+    <div
+      class="col-span-3 sm:col-span-6 lg:col-span-9 px-4 py-4 flex justify-end"
+    >
       <!-- 上一頁 -->
       <button
         class="
