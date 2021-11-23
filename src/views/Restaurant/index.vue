@@ -1,18 +1,22 @@
 <script setup>
 import { reactive, onMounted, computed, watch } from 'vue'
-import { gsap } from 'gsap'
-import cities from '../../utils/cityData'
+import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { pageData } from '../../utils/pagePagination'
-import noImage from '../../assets/images/no-image.jpeg'
 
+import cities from '../../utils/cityData'
+import { pageData } from '../../utils/pagePagination'
+
+import { gsap } from 'gsap'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 gsap.registerPlugin(ScrollToPlugin)
 
 import cover from '../../assets/images/cover2.jpeg'
 import logo from '../../assets/images/logo-bark.svg'
 import slideDown from '../../assets/icon/slideDown_default.svg'
+import noImage from '../../assets/images/no-image.jpeg'
 
+const route = useRoute()
+const routeQueryCity = route.query.city
 const store = useStore()
 const state = reactive({
   coverImg: {
@@ -21,7 +25,7 @@ const state = reactive({
   page: 1,
 
   form: {
-    city: 'NantouCounty',
+    city: null,
   },
 
   resData: [],
@@ -95,7 +99,12 @@ function prevPage(resData, state, counts) {
   )
 }
 
+function initSelectCityName(cityName = 'NantouCounty', form) {
+  form.city = cityName
+}
+
 onMounted(async () => {
+  await initSelectCityName(routeQueryCity, state.form)
   await store.dispatch('get_city_restaurant', state.form)
   getCityRestaurantData()
 })

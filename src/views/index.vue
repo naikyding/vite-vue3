@@ -13,7 +13,7 @@ const state = reactive({
   website: {
     cover: { backgroundImage: `url(${cover1})` },
   },
-  type: [{ 景點: 'attractions' }],
+  type: [{ 景點: 'attractions' }, { 美食: 'restaurant' }],
   cities,
 
   form: {
