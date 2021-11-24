@@ -18,8 +18,8 @@ export const getTourismAPI = ({
   $top = null,
   $format = 'JSON',
   $filter = null,
-}) => {
-  return request.get(`ScenicSpot/${city}`, {
+}) =>
+  request.get(`ScenicSpot/${city}`, {
     params: {
       city,
       $top,
@@ -27,7 +27,6 @@ export const getTourismAPI = ({
       $filter,
     },
   })
-}
 
 // 取得[指定城市]餐飲資料
 export const getAllRestaurantAPI = ({
@@ -35,8 +34,8 @@ export const getAllRestaurantAPI = ({
   $top = null,
   $format = 'JSON',
   $filter = null,
-}) => {
-  return request.get('Restaurant', {
+}) =>
+  request.get('Restaurant', {
     params: {
       city,
       $top,
@@ -44,4 +43,18 @@ export const getAllRestaurantAPI = ({
       $filter,
     },
   })
-}
+
+export const getCityRoomsAPI = ({
+  city = 'NewTaipei',
+  $top = null,
+  $format = 'JSON',
+  $filter = null,
+}) =>
+  request.get(`/Hotel/${city}`, {
+    params: {
+      city,
+      $top,
+      $format,
+      $filter,
+    },
+  })
