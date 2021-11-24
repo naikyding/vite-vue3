@@ -23,6 +23,16 @@ import router from '../../router'
 
 const store = useStore()
 const route = useRoute()
+const breakpoints = reactive({
+  768: {
+    slidesPerView: 1.6,
+    spaceBetween: 55,
+  },
+  1024: {
+    slidesPerView: 1.9,
+    spaceBetween: 70,
+  },
+})
 SwiperCore.use([Pagination, Navigation])
 
 // 取得各別旅遊景點
@@ -116,14 +126,15 @@ onMounted(() => {
       </h2>
       <div class="slider">
         <swiper
-          :slides-per-view="1.9"
-          :space-between="80"
+          :slides-per-view="1"
+          :space-between="40"
           :slides-per-group="1"
           :loop-fill-group-with-blank="true"
           :navigation="true"
           :loop="true"
           :centered-slides="true"
           :initial-slide="3"
+          :breakpoints="breakpoints"
           class="mySwiper h-60 cursor-pointer"
         >
           <swiper-slide

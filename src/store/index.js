@@ -35,8 +35,12 @@ const actions = {
   },
 
   async get_tourism({ commit }, filterData) {
-    const res = await getTourismAPI(filterData)
-    if (res.status === 200) commit('SET_SEARCH_TOURISM', res.data)
+    try {
+      const res = await getTourismAPI(filterData)
+      if (res.status === 200) commit('SET_SEARCH_TOURISM', res.data)
+    } catch (err) {
+      console.log(err)
+    }
   },
 
   async get_city_restaurant({ commit }, filterData) {
