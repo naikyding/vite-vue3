@@ -1,85 +1,57 @@
 <script setup>
 import { reactive, onMounted, computed, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { useStore } from 'vuex'
-
 import { getCityRoomsData } from '../../utils/room'
+import { useStore } from 'vuex'
+import { scrollToArea } from '../../utils/gsap'
+import { dataFilter } from '../../utils/dataUtils'
+import noImage from '../../assets/images/no-image.jpeg'
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import SwiperCore, { Pagination } from 'swiper'
+import 'swiper/css'
+import 'swiper/css/pagination'
+import noData from '../../assets/images/no-data.png'
+
+SwiperCore.use([Pagination])
 
 import cities from '../../utils/cityData'
-import { pageData } from '../../utils/pagePagination'
-
-import { gsap } from 'gsap'
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
-gsap.registerPlugin(ScrollToPlugin)
 
 import cover from '../../assets/images/cover3.jpeg'
 import logo from '../../assets/images/logo-bark.svg'
 import slideDown from '../../assets/icon/slideDown_default.svg'
 
-const route = useRoute()
-const routeQueryCity = route.query.city
 const store = useStore()
 const state = reactive({
   coverImg: {
     backgroundImage: `url(${cover})`,
   },
-  page: 1,
 
   form: {
-    city: null,
+    city: 'Taipei',
   },
 
-  resData: [],
+  searchData: [],
 
   activePage: 1,
   pageGroup: 9,
 })
 
+// 搜尋旅宿結果
+const searchCityRoomsData = computed(() => store.state.cityRooms)
+const filterDataTagsAry = computed(() =>
+  dataFilter(['Class', 'Grade'], searchCityRoomsData.value)
+)
+
 // 如果更新城市
 watch(
   () => state.form.city,
-  async () => {
-    state.activePage = 1
-    await getCityRoomsData(state.form)
-    getCityRoomsFilter()
+  () => {
+    getCityRoomsData(state.form)
   }
 )
-
-const activeCityNameZH = computed(() => {
-  let cityNameZh
-  for (let cityIndex in cities) {
-    if (cities[cityIndex] === state.form.city) cityNameZh = cityIndex
-  }
-  return cityNameZh
-})
-
-const stateDataFilterActiveCity = computed(() =>
-  store.state.cityRooms.filter((item) => item.City === activeCityNameZH.value)
-)
-
-function goSectionArea() {
-  const target = document.querySelector('section')
-  gsap.to(window, { duration: 0.6, ease: 'power1', scrollTo: target })
-}
-
-async function getCityRoomsFilter() {
-  state.resData = await pageData(
-    stateDataFilterActiveCity.value,
-    state.activePage,
-    state.pageGroup
-  )
-
-  console.log(state.resData)
-}
-
-function initSelectCityName(cityName = 'NantouCounty', form) {
-  form.city = cityName
-}
 
 onMounted(async () => {
-  await initSelectCityName(routeQueryCity, state.form)
-  await getCityRoomsData(state.form)
-  await getCityRoomsFilter()
+  // 搜尋當前城市旅宿
+  getCityRoomsData(state.form)
 })
 </script>
 
@@ -90,26 +62,22 @@ onMounted(async () => {
       <img class="px-10 md:px-0" :src="logo" alt="" />
     </div>
     <div class="absolute bottom-5 flex justify-center w-full slider-down">
-      <button @click="goSectionArea">
+      <button @click="scrollToArea('section')">
         <img :src="slideDown" alt="" />
       </button>
     </div>
   </div>
 
   <section class="grid grid-cols-1 px-4 md:px-0 md:grid-cols-5 text-gray-500">
-    <div class="col-start-2 col-span-3 py-20 text-center tracking-wider">
-      <p>
-        民以食為天的臺灣，幾乎是三步一小吃店，五步一大餐廳，可說是應有盡有。近年來由於工商業的發展快速，臺灣吃的文化除了傳統的中式飲食方式外，也發展到中式速食連鎖店的經營方式，使得臺灣吃的藝術變得更加繁複。
-      </p>
-      <p class="mt-8">
-        因臺灣地處世界文化交流的總匯，世界各國的飲食也紛紛在臺灣出現，美國的漢堡、義大利的披薩、日本的生魚片、德國的豬腳、瑞士的乳酪等等，包羅萬象，讓臺灣著實成為饕家的天堂。而臺灣獨有的本土料理，風靡全球，嚐味一次，必將永生難忘。
-      </p>
-
-      <!-- LOGO -->
-      <div class="my-16">
-        <img class="mx-auto" width="120" :src="logo" alt="" />
-      </div>
-
+    <div
+      class="
+        col-span-1
+        md:col-start-2 md:col-span-3
+        py-20
+        text-center
+        tracking-wider
+      "
+    >
       <!-- SELECTOR -->
       <div
         class="
@@ -133,7 +101,7 @@ onMounted(async () => {
             font-bold
           "
         >
-          您想找哪個地方的美食呢？
+          您想找哪個地方的旅宿呢？
         </div>
 
         <!-- select 地區 -->
@@ -181,9 +149,153 @@ onMounted(async () => {
             </svg>
           </div>
         </div>
+
+        <!-- 篩選屬性 -->
+        <div class="col-span-1 grid grid-cols-3 gap-2">
+          <div
+            v-for="(tag, index) in filterDataTagsAry"
+            :key="index"
+            class="
+              tag
+              col-span-1
+              flex
+              justify-center
+              items-center
+              border
+              text-sm
+              rounded
+              h-14
+            "
+          >
+            {{ tag }}
+          </div>
+        </div>
       </div>
     </div>
   </section>
+
+  <!-- 搜尋區塊 -->
+  <div class="px-4 py-10 md:px-8">
+    <div
+      v-show="searchCityRoomsData.length < 1"
+      class="flex justify-center items-center"
+    >
+      <img :src="noData" alt="no data" />
+    </div>
+    <Swiper
+      v-show="searchCityRoomsData.length > 1"
+      :style="{ '--swiper-pagination-color': '#7BAEBE' }"
+      :slides-per-view="1"
+      :space-between="10"
+      :lazy="true"
+      :pagination="{
+        dynamicBullets: true,
+      }"
+      :breakpoints="{
+        '640': {
+          slidesPerView: 2,
+          spaceBetween: 20,
+        },
+        '768': {
+          slidesPerView: 3,
+          spaceBetween: 30,
+        },
+        '1024': {
+          slidesPerView: 4,
+          spaceBetween: 20,
+        },
+      }"
+      class="mySwiper h-full"
+    >
+      <SwiperSlide
+        v-for="room in searchCityRoomsData"
+        :key="room.ID"
+        class="h-42 rounded-lg border overflow-hidden"
+      >
+        <div class="room__img h-40 relative">
+          <div
+            class="
+              room__city
+              absolute
+              top-3
+              left-3
+              bg-primary
+              rounded-lg
+              px-3
+              py-1
+              text-xs
+            "
+          >
+            {{ room.City }}
+          </div>
+          <img
+            class="h-full w-full object-cover object-center"
+            :src="room.Picture.PictureUrl1 || noImage"
+            :alt="room.Name"
+          />
+        </div>
+        <div class="room__spec px-4 py-1 text-gray-500 text-xs">
+          <h2 class="text-base text-black">{{ room.Name }}</h2>
+          <!-- 分類 -->
+          <div class="location flex items-center my-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 text-primary2"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"
+              />
+            </svg>
+            <span class="ml-1">
+              {{ room.Class }}
+            </span>
+          </div>
+          <!-- 地址 -->
+          <div class="location flex items-center my-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 text-primary2"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <span class="ml-1">
+              {{
+                room.Address.length > 12
+                  ? room.Address.substr(0, 12) + '...'
+                  : room.Address
+              }}
+            </span>
+          </div>
+          <!-- 電話 -->
+          <a :href="`tel:${room.Phone}`">
+            <div class="location flex items-center my-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 text-primary2"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"
+                />
+              </svg>
+              <span class="ml-1">
+                {{ room.Phone }}
+              </span>
+            </div>
+          </a>
+        </div>
+      </SwiperSlide>
+    </Swiper>
+  </div>
 </template>
 
 <style scoped>

@@ -16,7 +16,7 @@ const state = reactive({
     { 旅遊情報: '#' },
     { 景點查詢: '/attractions' },
     { 美食推薦: '/restaurant' },
-    { 旅宿資訊: '#' },
+    { 旅宿資訊: '/room' },
     { 節慶活動: '#' },
   ],
   mobile: {

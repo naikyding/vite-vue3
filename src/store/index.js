@@ -58,6 +58,7 @@ const actions = {
 
   // 取得[指定]旅宿
   async get_city_rooms({ commit }, filterData) {
+    commit('SET_CITY_ROOMS', [])
     const res = await getCityRoomsAPI(filterData)
     if (res.status === 200) commit('SET_CITY_ROOMS', res.data)
   },
