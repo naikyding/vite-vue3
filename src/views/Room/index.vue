@@ -1,25 +1,25 @@
 <script setup>
 import { reactive, onMounted, computed, watch } from 'vue'
-import { getCityRoomsData } from '../../utils/room'
 import { useStore } from 'vuex'
-import { scrollToArea } from '../../utils/gsap'
-import { dataFilter } from '../../utils/dataUtils'
-import noImage from '../../assets/images/no-image.jpeg'
-import { Swiper, SwiperSlide } from 'swiper/vue'
+
+import HotRooms from './HotRooms.vue'
 import SwiperCore, { Pagination } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/pagination'
-import noData from '../../assets/images/no-data.png'
 
-SwiperCore.use([Pagination])
-
+import { getCityRoomsData } from '../../utils/room'
+import { scrollToArea } from '../../utils/gsap'
+import { dataFilter } from '../../utils/dataUtils'
 import cities from '../../utils/cityData'
 
+import slideDown from '../../assets/icon/slideDown_default.svg'
 import cover from '../../assets/images/cover3.jpeg'
 import logo from '../../assets/images/logo-bark.svg'
-import slideDown from '../../assets/icon/slideDown_default.svg'
+import viewImage from '../../assets/images/room-image.jpeg'
 
 const store = useStore()
+SwiperCore.use([Pagination])
+
 const state = reactive({
   coverImg: {
     backgroundImage: `url(${cover})`,
@@ -49,7 +49,7 @@ watch(
   }
 )
 
-onMounted(async () => {
+onMounted(() => {
   // 搜尋當前城市旅宿
   getCityRoomsData(state.form)
 })
@@ -68,29 +68,33 @@ onMounted(async () => {
     </div>
   </div>
 
-  <section class="grid grid-cols-1 px-4 md:px-0 md:grid-cols-5 text-gray-500">
-    <div
-      class="
-        col-span-1
-        md:col-start-2 md:col-span-3
-        py-20
-        text-center
-        tracking-wider
-      "
-    >
-      <!-- SELECTOR -->
-      <div
-        class="
-          select
-          grid grid-cols-1
-          gap-2
-          md:grid-cols-2
-          py-8
-          border-t-2 border-b-2
-          px-0
-          md:px-6
-        "
-      >
+  <section
+    class="
+      grid grid-cols-1
+      gap-1
+      md:gap-4
+      lg:gap-16
+      mt-10
+      md:grid-cols-3
+      text-gray-500
+      px-4
+      sm:px-8
+      xl:px-36
+      min-h-[480px]
+    "
+  >
+    <!-- 圖片區 -->
+    <div class="col-span-1 px-10 md:px-0 py-0 md:py-10">
+      <img
+        class="h-full w-full object-cover rounded-tr-[100px] rounded-bl-[100px]"
+        :src="viewImage"
+        alt=""
+      />
+    </div>
+
+    <!-- 篩選區 -->
+    <div class="col-span-1 md:col-span-2 text-center tracking-wider">
+      <div class="select py-4 md:py-20 px-0">
         <div
           class="
             flex
@@ -101,11 +105,25 @@ onMounted(async () => {
             font-bold
           "
         >
-          您想找哪個地方的旅宿呢？
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="#E8CB89"
+            class="bi bi-building w-6 h-6 mr-3"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"
+            />
+            <path
+              d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"
+            />
+          </svg>
+          快速找到您感興趣的住宿點
         </div>
 
         <!-- select 地區 -->
-        <div class="select-area w-full relative my-3 md:my-0">
+        <div class="select-area w-full relative my-3 md:my-8">
           <select
             v-model="state.form.city"
             class="
@@ -174,128 +192,7 @@ onMounted(async () => {
     </div>
   </section>
 
-  <!-- 搜尋區塊 -->
-  <div class="px-4 py-10 md:px-8">
-    <div
-      v-show="searchCityRoomsData.length < 1"
-      class="flex justify-center items-center"
-    >
-      <img :src="noData" alt="no data" />
-    </div>
-    <Swiper
-      v-show="searchCityRoomsData.length > 1"
-      :style="{ '--swiper-pagination-color': '#7BAEBE' }"
-      :slides-per-view="1"
-      :space-between="10"
-      :lazy="true"
-      :pagination="{
-        dynamicBullets: true,
-      }"
-      :breakpoints="{
-        '640': {
-          slidesPerView: 2,
-          spaceBetween: 20,
-        },
-        '768': {
-          slidesPerView: 3,
-          spaceBetween: 30,
-        },
-        '1024': {
-          slidesPerView: 4,
-          spaceBetween: 20,
-        },
-      }"
-      class="mySwiper h-full"
-    >
-      <SwiperSlide
-        v-for="room in searchCityRoomsData"
-        :key="room.ID"
-        class="h-42 rounded-lg border overflow-hidden"
-      >
-        <div class="room__img h-40 relative">
-          <div
-            class="
-              room__city
-              absolute
-              top-3
-              left-3
-              bg-primary
-              rounded-lg
-              px-3
-              py-1
-              text-xs
-            "
-          >
-            {{ room.City }}
-          </div>
-          <img
-            class="h-full w-full object-cover object-center"
-            :src="room.Picture.PictureUrl1 || noImage"
-            :alt="room.Name"
-          />
-        </div>
-        <div class="room__spec px-4 py-1 text-gray-500 text-xs">
-          <h2 class="text-base text-black">{{ room.Name }}</h2>
-          <!-- 分類 -->
-          <div class="location flex items-center my-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 text-primary2"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"
-              />
-            </svg>
-            <span class="ml-1">
-              {{ room.Class }}
-            </span>
-          </div>
-          <!-- 地址 -->
-          <div class="location flex items-center my-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 text-primary2"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                clip-rule="evenodd"
-              />
-            </svg>
-            <span class="ml-1">
-              {{
-                room.Address.length > 12
-                  ? room.Address.substr(0, 12) + '...'
-                  : room.Address
-              }}
-            </span>
-          </div>
-          <!-- 電話 -->
-          <a :href="`tel:${room.Phone}`">
-            <div class="location flex items-center my-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 text-primary2"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"
-                />
-              </svg>
-              <span class="ml-1">
-                {{ room.Phone }}
-              </span>
-            </div>
-          </a>
-        </div>
-      </SwiperSlide>
-    </Swiper>
-  </div>
+  <HotRooms :search-city-rooms-data="searchCityRoomsData" />
 </template>
 
 <style scoped>
