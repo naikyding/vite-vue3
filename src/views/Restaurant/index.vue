@@ -5,6 +5,8 @@ import { useStore } from 'vuex'
 
 import cities from '../../utils/cityData'
 import { pageData } from '../../utils/pagePagination'
+import { getCityRoomsData } from '../../utils/room'
+import Hotrooms from '../../views/Room/HotRooms.vue'
 
 import { gsap } from 'gsap'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
@@ -34,12 +36,16 @@ const state = reactive({
   pageGroup: 9,
 })
 
+// 搜尋旅宿結果
+const searchCityRoomsData = computed(() => store.state.cityRooms)
+
 // 如果更新城市
 watch(
   () => state.form.city,
   () => {
     state.activePage = 1
     getCityRestaurantData()
+    getCityRoomsData(state.form)
   }
 )
 
@@ -106,6 +112,7 @@ function initSelectCityName(cityName = 'NantouCounty', form) {
 onMounted(async () => {
   await initSelectCityName(routeQueryCity, state.form)
   await store.dispatch('get_city_restaurant', state.form)
+  getCityRoomsData(state.form)
   getCityRestaurantData()
 })
 </script>
@@ -219,8 +226,7 @@ onMounted(async () => {
       lg:grid-cols-9
       px-4
       md:px-[140px]
-      mb-10
-      md:mb-20
+      mb-4
     "
   >
     <!-- 美食資料 -->
@@ -345,6 +351,9 @@ onMounted(async () => {
       </button>
     </div>
   </section>
+  <div class="mb-10">
+    <Hotrooms :search-city-rooms-data="searchCityRoomsData" />
+  </div>
 </template>
 
 <style scoped>

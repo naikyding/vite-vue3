@@ -3,9 +3,6 @@ import { reactive, onMounted, computed, watch } from 'vue'
 import { useStore } from 'vuex'
 
 import HotRooms from './HotRooms.vue'
-import SwiperCore, { Pagination } from 'swiper'
-import 'swiper/css'
-import 'swiper/css/pagination'
 
 import { getCityRoomsData } from '../../utils/room'
 import { scrollToArea } from '../../utils/gsap'
@@ -18,7 +15,6 @@ import logo from '../../assets/images/logo-bark.svg'
 import viewImage from '../../assets/images/room-image.jpeg'
 
 const store = useStore()
-SwiperCore.use([Pagination])
 
 const state = reactive({
   coverImg: {

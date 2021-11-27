@@ -1,5 +1,10 @@
 <script setup>
+import SwiperCore, { Pagination } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/vue'
+import 'swiper/css'
+import 'swiper/css/pagination'
+SwiperCore.use([Pagination])
+
 import noImage from '../../assets/images/no-image.jpeg'
 import noData from '../../assets/images/no-data.png'
 
