@@ -1,5 +1,6 @@
 <script setup>
 import { reactive, onMounted, computed, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 
 import HotRooms from './HotRooms.vue'
@@ -14,6 +15,7 @@ import cover from '../../assets/images/cover3.jpeg'
 import logo from '../../assets/images/logo-bark.svg'
 import viewImage from '../../assets/images/room-image.jpeg'
 
+const route = useRoute()
 const store = useStore()
 
 const state = reactive({
@@ -46,6 +48,7 @@ watch(
 )
 
 onMounted(() => {
+  if (route.query.city) state.form.city = route.query.city
   // 搜尋當前城市旅宿
   getCityRoomsData(state.form)
 })
@@ -187,8 +190,9 @@ onMounted(() => {
       </div>
     </div>
   </section>
-
-  <HotRooms :search-city-rooms-data="searchCityRoomsData" />
+  <div class="mb-20">
+    <HotRooms :search-city-rooms-data="searchCityRoomsData" />
+  </div>
 </template>
 
 <style scoped>
