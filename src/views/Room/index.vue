@@ -7,13 +7,14 @@ import HotRooms from './HotRooms.vue'
 
 import { getCityRoomsData } from '../../utils/room'
 import { scrollToArea } from '../../utils/gsap'
-import { dataFilter } from '../../utils/dataUtils'
+import { dataFilter, filterData } from '../../utils/dataUtils'
 import cities from '../../utils/cityData'
 
 import slideDown from '../../assets/icon/slideDown_default.svg'
 import cover from '../../assets/images/cover3.jpeg'
 import logo from '../../assets/images/logo-bark.svg'
 import viewImage from '../../assets/images/room-image.jpeg'
+import noImg from '../../assets/images/no-image.jpeg'
 
 const route = useRoute()
 const store = useStore()
@@ -28,6 +29,8 @@ const state = reactive({
   },
 
   searchData: [],
+  filterTagData: [],
+  activeTag: null,
 
   activePage: 1,
   pageGroup: 9,
@@ -46,6 +49,11 @@ watch(
     getCityRoomsData(state.form)
   }
 )
+
+function setFilterTagData(state, payload, tag) {
+  state.filterTagData = payload
+  state.activeTag = tag
+}
 
 onMounted(() => {
   if (route.query.city) state.form.city = route.query.city
@@ -67,13 +75,17 @@ onMounted(() => {
     </div>
   </div>
 
+  <section class="">
+    <HotRooms :search-city-rooms-data="searchCityRoomsData" />
+  </section>
+
   <section
     class="
       grid grid-cols-1
       gap-1
       md:gap-4
       lg:gap-16
-      mt-10
+      mt-4
       md:grid-cols-3
       text-gray-500
       px-4
@@ -183,16 +195,42 @@ onMounted(() => {
               rounded
               h-14
             "
+            :class="{ 'bg-primary2 text-white': state.activeTag === tag }"
+            @click="
+              setFilterTagData(state, filterData(tag, searchCityRoomsData), tag)
+            "
           >
             {{ tag }}
           </div>
         </div>
       </div>
     </div>
+
+    <!-- 搜尋結果 -->
+    <div class="mb-20 col-span-1 md:col-span-3">
+      <h2>篩選結果</h2>
+      <ul class="grid grid-cols-1 gap-y-5">
+        <li
+          v-for="item in state.filterTagData"
+          :key="item.ID"
+          class="border rounded-2xl overflow-hidden grid grid-cols-4 h-32"
+        >
+          <div class="card-img col-span-2">
+            <img
+              class="object-center object-cover h-full w-full"
+              :src="item.Picture.PictureUrl1 || noImg"
+              :alt="item.Name"
+            />
+          </div>
+          <div class="card-desc col-span-2">
+            <h2>
+              {{ item.Name }}
+            </h2>
+          </div>
+        </li>
+      </ul>
+    </div>
   </section>
-  <div class="mb-20">
-    <HotRooms :search-city-rooms-data="searchCityRoomsData" />
-  </div>
 </template>
 
 <style scoped>

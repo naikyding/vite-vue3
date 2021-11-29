@@ -18,3 +18,9 @@ export const dataFilter = (tagItems, data) => {
   filterTagAry = filterTagAry.filter((item) => item)
   return filterTagAry.sort()
 }
+
+export const filterData = (filterItem, allData) => {
+  return allData.filter(
+    (item) => item.Class === filterItem || item.Grade === filterItem
+  )
+}
